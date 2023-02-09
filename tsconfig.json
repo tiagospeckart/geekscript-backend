@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "module": "NodeNext",
+        "moduleResolution": "nodenext",
+        "target": "ES3",
+        "sourceMap": true,
+        "outDir": "dist",
+        "esModuleInterop": true,
+    },
+    "include": ["src/**/*"],
+    "ts-node": {
+		"esm": true
+	}
+}
