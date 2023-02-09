@@ -25,9 +25,7 @@ todo
 
 ## Installation
 
-1. Dowload packages `npm i`
-2. Build `npm run build`
-3. Test server `nodemon`
+todo
 
 ## Project Team
 
