@@ -1,10 +1,10 @@
 import { DataTypes } from "sequelize";
 import { mySqlConection } from "../database";
 
-const connection = mySqlConection.getInstance();
+const dbConnection = mySqlConection.getInstance();
 
-const Category = connection.define("Category", {
-  category_id: {
+const Category = dbConnection.define("Category", {
+  id_category: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,

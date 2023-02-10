@@ -4,9 +4,9 @@ import OrderDetail from "./OrderDetail";
 import Product from "./Product";
 
 
-const connection = mySqlConection.getInstance();
+const dbConnection = mySqlConection.getInstance();
 
-const OrderItem = connection.define("OrderItem", {
+const OrderItem = dbConnection.define("OrderItem", {
   id_order_item: {
     type: DataTypes.INTEGER,
     primaryKey: true,

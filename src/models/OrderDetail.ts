@@ -2,9 +2,9 @@ import { DataTypes } from "sequelize";
 import { mySqlConection } from "../database";
 import User from "./User";
 
-const connection = mySqlConection.getInstance();
+const dbConnection = mySqlConection.getInstance();
 
-const OrderDetail = connection.define("OrderDetail", {
+const OrderDetail = dbConnection.define("OrderDetail", {
   id_order_detail_: {
     type: DataTypes.INTEGER,
     primaryKey: true,

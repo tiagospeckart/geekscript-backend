@@ -2,10 +2,10 @@ import { DataTypes } from "sequelize";
 import { mySqlConection } from "../database";
 import Category from "./Category";
 
-const connection = mySqlConection.getInstance();
+const dbConnection = mySqlConection.getInstance();
 
-const Product = connection.define("Product", {
-  product_id: {
+const Product = dbConnection.define("Product", {
+  id_product: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
@@ -13,8 +13,11 @@ const Product = connection.define("Product", {
   name: {
     type: DataTypes.STRING,
   },
-  category_id: {
+  photo: {
     type: DataTypes.STRING,
+  },
+  category_id: {
+    type: DataTypes.INTEGER,
     references: {
       model: Category,
       key: "id",
