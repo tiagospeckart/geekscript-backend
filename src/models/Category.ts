@@ -6,8 +6,8 @@ const dbConnection = mySqlConection.getInstance();
 interface Category extends Model<InferAttributes<Category>, InferCreationAttributes<Category>> {
   id_category: CreationOptional<number>;
   name: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: CreationOptional<Date>;
+  updatedAt: CreationOptional<Date>;
 }
 
 const Category = dbConnection.define<Category>(

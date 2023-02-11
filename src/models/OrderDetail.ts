@@ -9,8 +9,8 @@ interface OrderDetail extends Model<InferAttributes<OrderDetail>, InferCreationA
   id_order_detail: CreationOptional<number>;
   total: number;
   user_id: ForeignKey<number>;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: CreationOptional<Date>;
+  updatedAt: CreationOptional<Date>;
 }
 
 const OrderDetail = dbConnection.define<OrderDetail>(

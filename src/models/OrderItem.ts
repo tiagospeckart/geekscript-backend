@@ -10,8 +10,8 @@ interface OrderItem extends Model<InferAttributes<OrderItem>, InferCreationAttri
   product_id: ForeignKey<number>
   order_detail_id: ForeignKey<number>
   quantity: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: CreationOptional<Date>;
+  updatedAt: CreationOptional<Date>;
 }
 
 const OrderItem = dbConnection.define<OrderItem>(

@@ -11,8 +11,8 @@ interface Product extends Model<InferAttributes<Product>, InferCreationAttribute
   category_id: ForeignKey<number>
   price: number;
   description: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: CreationOptional<Date>;
+  updatedAt: CreationOptional<Date>;
 }
 
 const Product = dbConnection.define<Product>(
