@@ -1,13 +1,23 @@
-import { DataTypes } from "sequelize";
+import {DataTypes, CreationOptional, InferAttributes, InferCreationAttributes, Model} from "sequelize";
 import { mySqlConection } from "../database";
 
 const dbConnection = mySqlConection.getInstance();
 
-const User = dbConnection.define(
+interface User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
+  id_user: CreationOptional<number>;
+  name: string;
+  email: string;
+  password: string;
+  isAdm: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const User = dbConnection.define<User>(
   "User",
   {
     id_user: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       primaryKey: true,
       autoIncrement: true,
     },

@@ -1,14 +1,25 @@
-import { DataTypes } from "sequelize";
+import {DataTypes, CreationOptional, InferAttributes, InferCreationAttributes, Model, ForeignKey} from "sequelize";
 import { mySqlConection } from "../database";
 import Category from "./Category";
 
 const dbConnection = mySqlConection.getInstance();
 
-const Product = dbConnection.define(
+interface Product extends Model<InferAttributes<Product>, InferCreationAttributes<Product>> {
+  id_product: CreationOptional<number>;
+  name: string;
+  photo: string;
+  category_id: ForeignKey<number>
+  price: number;
+  description: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const Product = dbConnection.define<Product>(
   "Product",
   {
     id_product: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       primaryKey: true,
       autoIncrement: true,
     },

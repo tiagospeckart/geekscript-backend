@@ -1,15 +1,24 @@
-import { DataTypes } from "sequelize";
+import {DataTypes, CreationOptional, InferAttributes, InferCreationAttributes, Model, ForeignKey} from "sequelize";
 import { mySqlConection } from "../database";
 import OrderDetail from "./OrderDetail";
 import Product from "./Product";
 
 const dbConnection = mySqlConection.getInstance();
 
-const OrderItem = dbConnection.define(
+interface OrderItem extends Model<InferAttributes<OrderItem>, InferCreationAttributes<OrderItem>> {
+  id_order_item: CreationOptional<number>;
+  product_id: ForeignKey<number>
+  order_detail_id: ForeignKey<number>
+  quantity: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const OrderItem = dbConnection.define<OrderItem>(
   "OrderItem",
   {
     id_order_item: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       primaryKey: true,
       autoIncrement: true,
     },
