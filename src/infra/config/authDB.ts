@@ -9,3 +9,5 @@ export const authDB = {
   password: process.env.DB_PASS as string,
   dialect: process.env.DB_DIALECT as Dialect,
 };
+
+module.exports = authDB;

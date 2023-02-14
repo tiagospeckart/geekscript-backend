@@ -12,7 +12,7 @@ Final project of [Gama Academy](https://www.gama.academy/) Webdevelopment course
 
 - **Node.js**
 - **Express**
-- Database yet to Design
+- Any relational Database supported by **Sequelize ORM**
 - **Typescript**
 
 ## Frontend Repo
@@ -29,6 +29,9 @@ todo
 2. Build `npm run build`
 3. Test server `npm run dev`
 
+### Create Database
+
+After building, run `npx sequelize db:create`
 ## Project Team
 
 <table>
