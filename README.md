@@ -31,7 +31,10 @@ todo
 
 ### Create Database
 
-After building, run `npx sequelize db:create`
+1. After building, run `npx sequelize db:create`
+2. Create your `.env` according to your preferred settings
+3. Run `npx sequelize db:migrate` to create SQL tables
+
 ## Project Team
 
 <table>
