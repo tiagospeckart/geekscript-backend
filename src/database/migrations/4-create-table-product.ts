@@ -36,9 +36,7 @@ export default {
             updatedAt: {
                 type: DataTypes.DATE,
             },
-        }, {
-            logging: console.log
-    })
+        })
     },
     down: (queryInterface: QueryInterface)=>{
         return queryInterface.dropTable('product');

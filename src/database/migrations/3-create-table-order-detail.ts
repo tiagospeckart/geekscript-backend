@@ -15,8 +15,7 @@ export default {
                 type: DataTypes.INTEGER.UNSIGNED,
                 references: {
                     model: {
-                        tableName: `user`,
-                        schema: `geek_script`
+                        tableName: `user`
                     },
                     key: `id_user`,
                 },
