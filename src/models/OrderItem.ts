@@ -1,4 +1,4 @@
-import {DataTypes, CreationOptional, InferAttributes, InferCreationAttributes, Model, ForeignKey} from "sequelize";
+import {DataTypes, CreationOptional, InferAttributes, InferCreationAttributes, Model, ForeignKey, Sequelize} from "sequelize";
 import { mySqlConection } from "../database";
 import OrderDetail from "./OrderDetail";
 import Product from "./Product";
