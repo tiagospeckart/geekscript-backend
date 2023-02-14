@@ -10,4 +10,4 @@ export const authDB = {
   dialect: process.env.DB_DIALECT as Dialect,
 };
 
-module.exports = authDB;
+//module.exports = authDB;
