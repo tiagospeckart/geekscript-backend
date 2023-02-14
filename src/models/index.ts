@@ -4,17 +4,17 @@ import OrderItem from "./OrderItem";
 import OrderDetail from "./OrderDetail";
 import Category from "./Category";
 
-Category.hasMany(Product, {foreignKey: "category_id"});
-Product.belongsTo(Category);
+Category.hasMany(Product,{foreignKey: "category_id"});
+Product.belongsTo(Category, {foreignKey: "category_id"});
 
 Product.hasMany(OrderItem, {foreignKey: "product_id"});
-OrderItem.belongsTo(Product);
+OrderItem.belongsTo(Product, {foreignKey: "product_id"});
 
 OrderDetail.hasMany(OrderItem, {foreignKey:"order_detail_id"})
-OrderItem.belongsTo(OrderDetail);
+OrderItem.belongsTo(OrderDetail, {foreignKey:"order_detail_id"});
 
 User.hasMany(OrderDetail, {foreignKey:"user_id"});
-OrderDetail.belongsTo(User);
+OrderDetail.belongsTo(User, {foreignKey:"user_id"});
 
 export  {
     Category,
