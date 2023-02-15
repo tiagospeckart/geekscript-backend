@@ -1,4 +1,5 @@
 import { Sequelize, Options } from "sequelize";
+import logger from "../infra/logger";
 
 export default class Connection {
   private instance: Sequelize;
@@ -21,9 +22,10 @@ export default class Connection {
 
       this.instance = new Sequelize(dbName, dbUser, dbPass, dbConfig);
       
+      logger.info(`Database: ${this.db_name} connected`)
     } catch (err) {
-      
-        throw err;
+      logger.error('Can\'t establish database connection:\n', err);
+      throw err;
     }
   }
   getInstance() {
@@ -32,9 +34,10 @@ export default class Connection {
   async hasConection() {
     try {
       await this.instance.authenticate();
-      console.log(`Database: ${this.db_name} connected`);
-    } catch (error) {
-      console.error('Can\'t establish database connection:\n' + error);
+      logger.info(`Database: ${this.db_name} connected`)
+    } catch (err) {
+      logger.error('Can\'t establish database connection:\n', err);
+      throw err;
     }
   }
 }
