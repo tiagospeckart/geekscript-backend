@@ -1,14 +1,16 @@
 import { Request, Response } from "express";
-import { User } from "../../models/";
+import { OrderDetail, User } from "../../models/";
+import bcrypt from "bcryptjs";
 
 const controller = {
-  async create(req: Request, res: Response) {
+   async create(req: Request, res: Response) {
     try {
       const { name, email, password, isAdm } = req.body;
+      const criptoPassword = bcrypt.hashSync(password, 10);
       const newUser = await User.create({
         name,
         email,
-        password,
+        password: criptoPassword,
         isAdm,
       });
       return res.status(201).json(newUser);
@@ -19,7 +21,9 @@ const controller = {
 
   async findAll(req: Request, res: Response) {
     try {
-      const findUsers = await User.findAll();
+      const findUsers = await User.findAll({
+        include: OrderDetail
+      });
       return res.status(200).json(findUsers);
     } catch (error) {
       return res.status(500).json("Não foi possível realizar a ação");
@@ -49,9 +53,9 @@ const controller = {
   async update(req: Request, res: Response) {
     try {
       const id = req.params.id;
-
       const { name, email, password, isAdm } = req.body;
-
+      const criptoPassword = bcrypt.hashSync(password, 10);
+      
       const checkUser = await User.findByPk(id);
       if (!checkUser) {
         return res.status(404).json("Id não encontrado");
@@ -61,7 +65,7 @@ const controller = {
         {
           name,
           email,
-          password,
+          password: criptoPassword,
           isAdm,
         },
         {
