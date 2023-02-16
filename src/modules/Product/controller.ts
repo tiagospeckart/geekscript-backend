@@ -20,9 +20,7 @@ const controller = {
 
   async findAll(req: Request, res: Response) {
     try {
-      const findProducts = await Product.findAll({
-        include: Category
-    });
+      const findProducts = await Product.findAll({ include: Category });
       return res.status(200).json(findProducts);
     } catch (error) {
       return res.status(500).json("Não foi possível realizar a ação");
@@ -38,7 +36,7 @@ const controller = {
         return res.status(404).json("Id não encontrado");
       }
 
-      findProduct = await Product.findByPk(id);
+      findProduct = await Product.findByPk(id, { include: Category });
       return res.status(200).json(findProduct);
     } catch {
       return res.status(500).json("Não foi possível realizar a ação");
