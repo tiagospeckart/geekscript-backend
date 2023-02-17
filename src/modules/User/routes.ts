@@ -1,12 +1,12 @@
 import { Router } from "express";
-import productController from "./controller";
+import controller from "./controller";
 
 const routes = Router();
 
-routes.post("/user", productController.create);
-routes.get("/user", productController.findAll);
-routes.get("/user/:id", productController.findOne);
-routes.put("/user/:id", productController.update);
-routes.delete("/user/:id", productController.delete);
+routes.post("/user", controller.create);
+routes.get("/user", controller.findAll);
+routes.get("/user/:id", controller.findOne);
+routes.put("/user/:id", controller.update);
+routes.delete("/user/:id", controller.delete);
 
 export default routes;
