@@ -18,6 +18,7 @@
   "homepage": "https://github.com/tiagospeckart/geekstore-backend#readme",
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
+    "@types/cors": "^2.8.13",
     "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.17",
     "@types/node": "^18.13.0",
@@ -29,6 +30,7 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-validation": "^4.1.0",
