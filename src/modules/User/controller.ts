@@ -2,11 +2,12 @@ import { Request, Response } from "express";
 import { OrderDetail, User } from "../../models/";
 import bcrypt from "bcryptjs";
 
-const controller = {
-   async create(req: Request, res: Response) {
+export default class controller {
+  static create = async (req: Request, res: Response): Promise<Response> => {
     try {
       const { name, email, password, isAdm } = req.body;
-      const criptoPassword = bcrypt.hashSync(password, 10);
+      const criptoPassword: string = bcrypt.hashSync(password, 10);
+
       const newUser = await User.create({
         name,
         email,
@@ -17,20 +18,20 @@ const controller = {
     } catch {
       return res.status(400).json("Não foi possível realizar o cadastro");
     }
-  },
+  };
 
-  async findAll(req: Request, res: Response) {
+  static findAll = async (req: Request, res: Response): Promise<Response> => {
     try {
       const findUsers = await User.findAll({
-        include: OrderDetail
+        include: OrderDetail,
       });
       return res.status(200).json(findUsers);
     } catch (error) {
       return res.status(500).json("Não foi possível realizar a ação");
     }
-  },
+  };
 
-  async findOne(req: Request, res: Response) {
+  static findOne = async (req: Request, res: Response): Promise<Response> => {
     try {
       const { id } = req.params;
       let findUser = await User.findByPk(id);
@@ -48,14 +49,14 @@ const controller = {
     } catch {
       return res.status(500).json("Não foi possível realizar a ação");
     }
-  },
+  };
 
-  async update(req: Request, res: Response) {
+  static update = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const id = req.params.id;
+      const id: string = req.params.id;
       const { name, email, password, isAdm } = req.body;
-      const criptoPassword = bcrypt.hashSync(password, 10);
-      
+      const criptoPassword: string = bcrypt.hashSync(password, 10);
+
       const checkUser = await User.findByPk(id);
       if (!checkUser) {
         return res.status(404).json("Id não encontrado");
@@ -80,9 +81,9 @@ const controller = {
     } catch (error) {
       return res.status(500).json("Não foi possível atualizar o cadastro");
     }
-  },
+  };
 
-  async delete(req: Request, res: Response) {
+  static delete = async (req: Request, res: Response): Promise<Response> => {
     try {
       const { id } = req.params;
 
@@ -99,7 +100,5 @@ const controller = {
     } catch (error) {
       return res.status(500).json("Não foi possível realizar a ação");
     }
-  },
-};
-
-export default controller;
+  };
+}
