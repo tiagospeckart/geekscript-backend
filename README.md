@@ -31,9 +31,11 @@ todo
 
 ### Create Database
 
-1.Create your own `.env` file according to your preferred settings
-2.After building the project, run `npx sequelize db:create`
-3.Run `npx sequelize db:migrate` to create generate tables
+1. Create your own `.env` file according to your preferred settings
+2. After Build: run `npx sequelize db:create`
+3. Run `npx sequelize db:migrate` to create generate tables
+4. Run `npx sequelize db:seed:all` to populate database with test data
+5. Starter admin account: email **admin@admin.com**, pass **admin123**
 
 ## Project Team
 
