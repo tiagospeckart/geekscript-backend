@@ -1,6 +1,6 @@
-import { Request, Response } from "express";
-import { OrderDetail, User } from "../../models/";
-import bcrypt from "bcryptjs";
+import { Request, Response } from 'express';
+import { Purchase, User } from '../../models/';
+import bcrypt from 'bcryptjs';
 
 export default class controller {
   static create = async (req: Request, res: Response): Promise<Response> => {
@@ -16,18 +16,18 @@ export default class controller {
       });
       return res.status(201).json(newUser);
     } catch {
-      return res.status(400).json("Não foi possível realizar o cadastro");
+      return res.status(400).json('Não foi possível realizar o cadastro');
     }
   };
 
   static findAll = async (req: Request, res: Response): Promise<Response> => {
     try {
       const findUsers = await User.findAll({
-        include: OrderDetail,
+        include: Purchase,
       });
       return res.status(200).json(findUsers);
     } catch (error) {
-      return res.status(500).json("Não foi possível realizar a ação");
+      return res.status(500).json('Não foi possível realizar a ação');
     }
   };
 
@@ -37,17 +37,17 @@ export default class controller {
       let findUser = await User.findByPk(id);
 
       if (!findUser) {
-        return res.status(404).json("Id não encontrado");
+        return res.status(404).json('Id não encontrado');
       }
 
       findUser = await User.findByPk(id, {
         attributes: {
-          exclude: ["password"],
+          exclude: ['password'],
         },
       });
       return res.status(200).json(findUser);
     } catch {
-      return res.status(500).json("Não foi possível realizar a ação");
+      return res.status(500).json('Não foi possível realizar a ação');
     }
   };
 
@@ -59,7 +59,7 @@ export default class controller {
 
       const checkUser = await User.findByPk(id);
       if (!checkUser) {
-        return res.status(404).json("Id não encontrado");
+        return res.status(404).json('Id não encontrado');
       }
 
       await User.update(
@@ -79,7 +79,7 @@ export default class controller {
       const showUser = await User.findByPk(id);
       return res.status(200).json(showUser);
     } catch (error) {
-      return res.status(500).json("Não foi possível atualizar o cadastro");
+      return res.status(500).json('Não foi possível atualizar o cadastro');
     }
   };
 
@@ -89,7 +89,7 @@ export default class controller {
 
       let deleteUser = await User.findByPk(id);
       if (!deleteUser) {
-        return res.status(404).json("Id não encontrado");
+        return res.status(404).json('Id não encontrado');
       }
       await User.destroy({
         where: {
@@ -98,7 +98,7 @@ export default class controller {
       });
       return res.status(204).json();
     } catch (error) {
-      return res.status(500).json("Não foi possível realizar a ação");
+      return res.status(500).json('Não foi possível realizar a ação');
     }
   };
 }
