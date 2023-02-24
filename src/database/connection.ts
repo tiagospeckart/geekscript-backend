@@ -22,7 +22,7 @@ export default class Connection {
 
       this.instance = new Sequelize(dbName, dbUser, dbPass, dbConfig);
       
-      logger.info(`Database: ${this.db_name} connected`)
+      //logger.info(`Database: ${this.db_name} connected`)
     } catch (err) {
       logger.error('Can\'t establish database connection:\n', err);
       throw err;
