@@ -8,9 +8,9 @@ interface Product extends Model<InferAttributes<Product>, InferCreationAttribute
   id_product: CreationOptional<number>;
   name: string;
   photo: string;
-  category_id: ForeignKey<number>
   price: number;
   description: string;
+  category_id: ForeignKey<number>
   createdAt: CreationOptional<Date>;
   updatedAt: CreationOptional<Date>;
 }
@@ -29,18 +29,18 @@ const Product = dbConnection.define<Product>(
     photo: {
       type: DataTypes.STRING,
     },
+    price: {
+      type: DataTypes.DECIMAL,
+    },
+    description: {
+      type: DataTypes.TEXT,
+    },
     category_id: {
       type: DataTypes.INTEGER,
       references: {
         model: Category,
         key: "id",
       },
-    },
-    price: {
-      type: DataTypes.DECIMAL,
-    },
-    description: {
-      type: DataTypes.TEXT,
     },
     createdAt: {
       type: DataTypes.DATE,
