@@ -3,7 +3,7 @@ import { QueryInterface, DataTypes} from "sequelize"
 export default {
     up: (queryInterface: QueryInterface) =>{
         return queryInterface.createTable('purchase_product', {
-            id_order_item: {
+            id_purchase_product: {
                 type: DataTypes.INTEGER.UNSIGNED,
                 primaryKey: true,
                 autoIncrement: true,
