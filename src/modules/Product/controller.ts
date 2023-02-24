@@ -4,13 +4,13 @@ import { Category, Product } from "../../models/";
 const controller = {
   async create(req: Request, res: Response) {
     try {
-      const { name, photo, category_id, price, description } = req.body;
+      const { name, photo, price, description, category_id } = req.body;
       const newProduct: Product = await Product.create({
         name,
         photo,
-        category_id,
         price,
         description,
+        category_id,
       });
       return res.status(201).json(newProduct);
     } catch {
@@ -47,7 +47,7 @@ const controller = {
     try {
       const id = req.params.id;
 
-      const { name, photo, category_id, price, description } = req.body;
+      const { name, photo, price, description, category_id } = req.body;
 
       const checkProduct = await Product.findByPk(id);
       if (!checkProduct) {
@@ -56,11 +56,11 @@ const controller = {
 
       await Product.update(
         {
-          name,
-          photo,
-          category_id,
-          price,
-          description,
+        name,
+        photo,
+        price,
+        description,
+        category_id,
         },
         {
           where: {
