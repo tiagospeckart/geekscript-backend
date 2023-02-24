@@ -7,9 +7,11 @@ export default {
                 type: DataTypes.INTEGER.UNSIGNED,
                 primaryKey: true,
                 autoIncrement: true,
+                allowNull: false
             },
             name: {
                 type: DataTypes.STRING,
+                allowNull: false
             },
             createdAt: {
                 type: DataTypes.DATE,
