@@ -3,19 +3,51 @@
   "info" : {
     "title" : "geek_script",
     "description" : "An API for a basic ecommerce themed around nerdy products.",
-    "version" : "1.0.3"
+    "version" : "1.0.4"
   },
   "servers" : [ {
     "url" : "http://localhost:5000",
     "description" : "Localhost for Development"
+  } ],
+  "tags" : [ {
+    "name" : "Register",
+    "description" : "Register into the system"
   }, {
-    "url" : "https://virtserver.swaggerhub.com/tiagospeckart/geek_script/1.0.0",
-    "description" : "SwaggerHub API Auto Mocking"
+    "name" : "Login",
+    "description" : "Logging interface"
+  }, {
+    "name" : "User",
+    "description" : "Api for users in the system"
+  }, {
+    "name" : "Category",
+    "description" : "Api for categories in the system"
   } ],
   "paths" : {
+    "/login" : {
+      "post" : {
+        "tags" : [ "Login" ],
+        "summary" : "Login route",
+        "operationId" : "login",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/login_body"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
     "/user" : {
       "post" : {
-        "tags" : [ "User" ],
+        "tags" : [ "Register", "User" ],
         "summary" : "Creates a new User",
         "operationId" : "createCategory",
         "requestBody" : {
@@ -42,7 +74,7 @@
                   "$ref" : "#/components/schemas/User"
                 },
                 "example" : {
-                  "id_category" : 3,
+                  "id_user" : 3,
                   "name" : "Test Name",
                   "email" : "test@email.com",
                   "password" : "testpass123",
@@ -68,6 +100,50 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/user/{id}" : {
+      "get" : {
+        "tags" : [ "User" ],
+        "summary" : "Returns a User by ID",
+        "operationId" : "getOneUser",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "User ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "minimum" : 1,
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/User"
+                },
+                "example" : {
+                  "id_user" : 3,
+                  "name" : "Test Name",
+                  "email" : "test@email.com",
+                  "password" : "testpass123",
+                  "isAdm" : 0,
+                  "createdAt" : "2023-02-24T13:01:02.700Z",
+                  "updatedAt" : "2023-02-24T13:01:02.700Z"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Requested resource not found"
           }
         }
       }
@@ -365,6 +441,23 @@
             "type" : "string"
           }
         }
+      },
+      "login_body" : {
+        "type" : "object",
+        "properties" : {
+          "email" : {
+            "type" : "string",
+            "format" : "email"
+          },
+          "password" : {
+            "type" : "string",
+            "format" : "password"
+          }
+        },
+        "example" : {
+          "email" : "test@email.com",
+          "password" : "testpass123"
+        }
       }
     },
     "responses" : {
@@ -379,6 +472,9 @@
       },
       "NoContent" : {
         "description" : "Request recieved and understood, but no need to send data back"
+      },
+      "UnauthorizedResponse" : {
+        "description" : "Invalid e-mail or password, please try again"
       }
     },
     "securitySchemes" : {
