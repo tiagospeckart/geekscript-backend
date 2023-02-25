@@ -1,4 +1,4 @@
-import{ validate, Joi } from "express-validation";
+import { validate, Joi } from 'express-validation';
 
 export default validate({
   params: Joi.object({
