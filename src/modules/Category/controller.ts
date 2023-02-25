@@ -8,7 +8,7 @@ const controller = {
 
       const checkCategory = await Category.count({ where: { name } });
       if (checkCategory) {
-        return res.status(400).json("categoria já existente");
+        return res.status(409).json("categoria já existente");
       }
 
       const newCategory = await Category.create({
