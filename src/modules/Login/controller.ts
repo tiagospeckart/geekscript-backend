@@ -34,7 +34,7 @@ export default class controller {
         { expiresIn: '30 days' }
       );
       
-      return res.json(token);
+      return res.status(200).json(token);
     } catch (error) {
       return res.status(500).json('Não foi possível realizar a ação');
     }
