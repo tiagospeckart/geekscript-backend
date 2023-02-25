@@ -1,9 +1,9 @@
 import express from "express";
-import { mySqlConection } from "./database";
-import "dotenv/config";
+import 'dotenv/config'
 import BaseRoutes from "./infra/BaseRoutes"
 import handleError from "./Middlewares/handleError";
 import cors from "cors";
+import { mySqlConection } from "./database";
 
 const app = express();
 
