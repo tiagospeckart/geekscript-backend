@@ -8,6 +8,11 @@ export default class controller {
       const { name, email, password } = req.body;
       const criptoPassword: string = bcrypt.hashSync(password, 10);
 
+      const checkEmail = await User.count({ where: { email } });
+      if (checkEmail) {
+        return res.status(409).json("Email já cadastrado");
+      }
+
       const newUser = await User.create({
         name,
         email,
@@ -55,6 +60,11 @@ export default class controller {
       const id: string = req.params.id;
       const { name, email, password, scope } = req.body;
       const criptoPassword: string = bcrypt.hashSync(password, 10);
+
+      const checkEmail = await User.count({ where: { email } });
+      if (checkEmail) {
+        return res.status(409).json("Email já cadastrado");
+      }
 
       const checkUser = await User.findByPk(id);
       if (!checkUser) {
