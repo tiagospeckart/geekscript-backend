@@ -6,7 +6,7 @@ import userAuthentication from "../../Middlewares/authentication";
 
 const routes = Router();
 
-routes.post("/user", createValidation, controller.create);
+routes.post("/user/register", createValidation, controller.create);
 routes.get("/user", userAuthentication, controller.findAll);
 routes.get("/user/:id", userAuthentication, controller.findOne);
 routes.put("/user/:id", userAuthentication, updateValidation, controller.update);

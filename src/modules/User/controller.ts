@@ -58,7 +58,7 @@ export default class controller {
   static update = async (req: Request, res: Response): Promise<Response> => {
     try {
       const id: string = req.params.id;
-      const { name, email, password, isAdm } = req.body;
+      const { name, email, password, scope } = req.body;
       const criptoPassword: string = bcrypt.hashSync(password, 10);
 
       const checkEmail = await User.count({ where: { email } });
@@ -76,7 +76,7 @@ export default class controller {
           name,
           email,
           password: criptoPassword,
-          isAdm,
+          scope,
         },
         {
           where: {

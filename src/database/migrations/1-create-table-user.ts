@@ -7,18 +7,23 @@ export default {
                 type: DataTypes.INTEGER.UNSIGNED,
                 primaryKey: true,
                 autoIncrement: true,
+                allowNull: false
             },
             name: {
                 type: DataTypes.STRING,
+                allowNull: false
             },
             email: {
                 type: DataTypes.STRING,
+                allowNull: false
             },
             password: {
                 type: DataTypes.STRING,
+                allowNull: false
             },
-            isAdm: {
-                type: DataTypes.TINYINT,
+            scope: {
+                type: DataTypes.STRING,
+                defaultValue: 'client'
             } ,
             createdAt: {
                 type: DataTypes.DATE,

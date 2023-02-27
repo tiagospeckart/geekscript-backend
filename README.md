@@ -12,16 +12,12 @@ Final project of [Gama Academy](https://www.gama.academy/) Webdevelopment course
 
 - **Node.js**
 - **Express**
-- Any relational Database supported by **Sequelize ORM**
+- **Sequelize ORM**
 - **Typescript**
 
 ## Frontend Repo
 
 Link -> todo
-
-## API Documentation
-
-todo
 
 ## Installation
 
@@ -31,7 +27,27 @@ todo
 
 ### Create Database
 
-After building, run `npx sequelize db:create`
+1. Create your own `.env` file according to your preferred settings
+2. After Build: run `npx sequelize db:create`
+3. Run `npx sequelize db:migrate` to create generate tables
+4. Run `npx sequelize db:seed:all` to populate database with test data
+5. Starter admin account: email **admin@admin.com**, pass **admin123**
+
+## API Documentation
+
+### Running locally
+
+1. Run server with `npm run dev`
+2. Acess URL `localhost:5000/swagger` 
+
+For ease of use, I *really* recommend the **Swagger Viewer** VS Code Extension. 
+
+To start:
+Open the swagger file (at /api-docs) and either:
+- Press F1 -> Run the Command `Preview Swagger` 
+- Press Shift + Alt + P
+- Right click file in explorer panel and click `Preview Swagger`
+
 ## Project Team
 
 <table>

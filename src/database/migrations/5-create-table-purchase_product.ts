@@ -2,33 +2,31 @@ import { QueryInterface, DataTypes} from "sequelize"
 
 export default {
     up: (queryInterface: QueryInterface) =>{
-        return queryInterface.createTable('product', {
-            id_product: {
+        return queryInterface.createTable('purchase_product', {
+            id_purchase_product: {
                 type: DataTypes.INTEGER.UNSIGNED,
                 primaryKey: true,
                 autoIncrement: true,
             },
-            name: {
-                type: DataTypes.STRING,
-            },
-            photo: {
-                type: DataTypes.STRING,
-            },
-            category_id: {
+            purchase_id: {
                 type: DataTypes.INTEGER.UNSIGNED,
                 references: {
                     model: {
-                        tableName:`category`,
+                        tableName: `purchase`
                     },
-                    key: `id_category`,
+                    key: `id_purchase`,
                 },
                 allowNull: false
             },
-            price: {
-                type: DataTypes.DECIMAL,
-            },
-            description: {
-                type: DataTypes.TEXT,
+            product_id: {
+                type: DataTypes.INTEGER.UNSIGNED,
+                references: {
+                    model: {
+                        tableName: `product`
+                    },
+                    key: `id_product`,
+                },
+                allowNull: false,
             },
             createdAt: {
                 type: DataTypes.DATE,
@@ -36,9 +34,11 @@ export default {
             updatedAt: {
                 type: DataTypes.DATE,
             },
-        })
+        }, {
+            logging: console.log
+    })
     },
     down: (queryInterface: QueryInterface)=>{
-        return queryInterface.dropTable('product');
+        return queryInterface.dropTable('purchase_product');
     },
 };

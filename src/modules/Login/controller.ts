@@ -1,11 +1,11 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import User from '../../models/User';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 import key from '../../configs/jwtKey';
 
 export default class controller {
-  static login = async (req: Request, res: Response): Promise<Response> => {
+  static login = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
     const { email, password } = req.body;
 
     const dataUser = await User.findOne({ where: { email } });
@@ -28,13 +28,13 @@ export default class controller {
           id_user: dataUser.id_user,
           name: dataUser.name,
           email: dataUser.email,
-          isAdm: dataUser.isAdm,
+          scope: dataUser.scope,
         },
         key.privateKey,
         { expiresIn: '30 days' }
       );
       
-      return res.json(token);
+      return res.status(200).json(token);
     } catch (error) {
       return res.status(500).json('Não foi possível realizar a ação');
     }
