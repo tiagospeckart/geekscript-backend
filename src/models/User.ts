@@ -8,7 +8,7 @@ interface User extends Model<InferAttributes<User>, InferCreationAttributes<User
   name: string;
   email: string;
   password: string;
-  isAdm?: number;
+  scope?: string;
   createdAt: CreationOptional<Date>;
   updatedAt: CreationOptional<Date>;
 }
@@ -30,8 +30,8 @@ const User = dbConnection.define<User>(
     password: {
       type: DataTypes.STRING,
     },
-    isAdm: {
-      type: DataTypes.TINYINT,
+    scope: {
+      type: DataTypes.STRING,
     } ,
     createdAt: {
       type: DataTypes.DATE,
