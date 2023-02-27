@@ -5,6 +5,6 @@ export default validate({
     name: Joi.string().required(),
     email: Joi.string().email().required(),
     password: Joi.string().required(),
-    isAdm: Joi.boolean(),
+    scope: Joi.string(),
   }),
 });
