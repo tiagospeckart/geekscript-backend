@@ -1,5 +1,5 @@
 import Connection from "./connection";
-import { authDB } from "../infra/config/authDB";
+import { authDB } from "../configs/authDB";
 
 const mySqlConection = new Connection(
   authDB.database,

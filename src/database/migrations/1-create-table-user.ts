@@ -21,9 +21,9 @@ export default {
                 type: DataTypes.STRING,
                 allowNull: false
             },
-            isAdm: {
-                type: DataTypes.TINYINT,
-                defaultValue: 0
+            scope: {
+                type: DataTypes.STRING,
+                defaultValue: 'client'
             } ,
             createdAt: {
                 type: DataTypes.DATE,

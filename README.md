@@ -17,7 +17,7 @@ Final project of [Gama Academy](https://www.gama.academy/) Webdevelopment course
 
 ## Frontend Repo
 
-Link -> todo
+[geek-script-front](https://github.com/GabrielGameDev/geek-script-front)
 
 ## Installation
 
