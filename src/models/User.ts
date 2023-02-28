@@ -32,6 +32,7 @@ const User = dbConnection.define<User>(
     },
     scope: {
       type: DataTypes.STRING,
+      defaultValue: 'client'
     } ,
     createdAt: {
       type: DataTypes.DATE,

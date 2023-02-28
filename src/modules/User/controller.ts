@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 export default class controller {
   static create = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const { name, email, password } = req.body;
+      const { name, email, password, scope } = req.body;
       const criptoPassword: string = bcrypt.hashSync(password, 10);
 
       const checkEmail = await User.count({ where: { email } });
@@ -16,7 +16,8 @@ export default class controller {
       const newUser = await User.create({
         name,
         email,
-        password: criptoPassword
+        password: criptoPassword,
+        scope: "client"
       });
       return res.status(201).json(newUser);
     } catch {

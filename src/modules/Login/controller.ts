@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import User from '../../models/User';
 import bcrypt from 'bcryptjs';
-import * as jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import key from '../../configs/jwtKey';
 
 export default class controller {
@@ -36,7 +36,7 @@ export default class controller {
 
       // Criar uma função para selecionar o id e retornar na resposta
       
-      return res.status(200).json(token);
+      return res.status(200).json({ id: dataUser.id_user, token: token });
     } catch (error) {
       return res.status(500).json('Não foi possível realizar a ação');
     }
