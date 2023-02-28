@@ -58,18 +58,13 @@ export default class controller {
   static update = async (req: Request, res: Response): Promise<Response> => {
     try {
       const id: string = req.params.id;
-      const { name, email, password, scope } = req.body;
-      const criptoPassword: string = bcrypt.hashSync(password, 10);
-
-      const checkEmail = await User.count({ where: { email } });
-      if (checkEmail) {
-        return res.status(409).json("Email já cadastrado");
-      }
-
       const checkUser = await User.findByPk(id);
       if (!checkUser) {
         return res.status(404).json('Id não encontrado');
       }
+
+      const { name, email, password, scope } = req.body;
+      const criptoPassword: string = bcrypt.hashSync(password, 10);
 
       await User.update(
         {

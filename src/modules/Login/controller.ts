@@ -33,6 +33,8 @@ export default class controller {
         key.privateKey,
         { expiresIn: '30 days' }
       );
+
+      // Criar uma função para selecionar o id e retornar na resposta
       
       return res.status(200).json(token);
     } catch (error) {
