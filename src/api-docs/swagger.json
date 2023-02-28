@@ -11,12 +11,16 @@
       "name": "MIT",
       "url": "https://opensource.org/license/mit/"
     },
-    "version": "1.0.5"
+    "version": "1.0.6"
   },
   "servers": [
     {
       "url": "http://localhost:5000",
       "description": "Localhost for Development"
+    },
+    {
+      "url": "http://localhost:6000",
+      "description": "test"
     }
   ],
   "tags": [
@@ -62,6 +66,10 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/Login"
+              },
+              "example": {
+                "email": "test@email.com",
+                "password": "testpass123"
               }
             }
           },
@@ -91,7 +99,8 @@
     "/user/register": {
       "post": {
         "tags": [
-          "Register"
+          "Register",
+          "User"
         ],
         "summary": "Creates a new User",
         "operationId": "registerUser",
@@ -117,15 +126,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/User"
-                },
-                "example": {
-                  "id_user": 3,
-                  "name": "Test Name",
-                  "email": "test@email.com",
-                  "password": "testpass123",
-                  "isAdm": 0,
-                  "createdAt": "2023-02-24T13:01:02.700Z",
-                  "updatedAt": "2023-02-24T13:01:02.700Z"
                 }
               }
             }
@@ -159,7 +159,17 @@
         "operationId": "getAllUser",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayUser"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server side error"
           }
         },
         "security": [
@@ -221,6 +231,602 @@
             "bearerAuth": []
           }
         ]
+      },
+      "put": {
+        "tags": [
+          "User",
+          "Admin"
+        ],
+        "summary": "Updates a User by ID",
+        "operationId": "updateOneUser",
+        "parameters": [
+          {
+            "name": "id_user",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "User updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "example": {
+                  "id_user": 3,
+                  "name": "Tester Alter",
+                  "email": "email@tester.com",
+                  "password": "$2a$10$1Rih7rJk0iWrK0zK.Zfxwu7ADhZW5c1kWQMrEtHx.d4Jb/ekHUpuK",
+                  "isAdm": 0,
+                  "createdAt": "2023-02-24T13:01:02.700Z",
+                  "updatedAt": "2023-02-24T13:01:02.700Z"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Id not found"
+          },
+          "500": {
+            "description": "Server side error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "User",
+          "Admin"
+        ],
+        "summary": "Updates a User by ID",
+        "operationId": "deleteOneUser",
+        "parameters": [
+          {
+            "name": "id_user",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "404": {
+            "description": "Id not found"
+          },
+          "500": {
+            "description": "Server side error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/product": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Returns a list of Products",
+        "operationId": "getAllProducts",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayProduct"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server side error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Product",
+          "Admin"
+        ],
+        "summary": "Creates a new Product",
+        "operationId": "createProduct",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              },
+              "example": {
+                "name": "string",
+                "photo": "string",
+                "price": 34.12,
+                "description": "string",
+                "category_id": 1
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request not understood, revise syntax"
+          }
+        }
+      }
+    },
+    "/product/{id_product}": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Returns a Product object",
+        "operationId": "getOneProduct",
+        "parameters": [
+          {
+            "name": "id_product",
+            "in": "path",
+            "description": "Product ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested resource not found"
+          },
+          "500": {
+            "description": "Server side error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Product",
+          "Admin"
+        ],
+        "summary": "Updates a Product",
+        "operationId": "updateProduct",
+        "parameters": [
+          {
+            "name": "id_product",
+            "in": "path",
+            "description": "Product ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Product"
+              },
+              "example": {
+                "price": 390.12
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested resource not found"
+          },
+          "500": {
+            "description": "Server side error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Product",
+          "Admin"
+        ],
+        "summary": "Deletes a Product",
+        "operationId": "deleteProduct",
+        "parameters": [
+          {
+            "name": "id_product",
+            "in": "path",
+            "description": "Product ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Request recieved and understood, but no need to send data back"
+          },
+          "401": {
+            "description": "Access token is missing or invalid"
+          },
+          "404": {
+            "description": "Requested resource not found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/purchase": {
+      "get": {
+        "tags": [
+          "Purchase",
+          "Admin"
+        ],
+        "summary": "Returns an array of Purchases by Users",
+        "operationId": "getAllPurchases",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayPurchase"
+                },
+                "example": [
+                  {
+                    "id_purchase": 1,
+                    "user_id": 1,
+                    "total": "393.73",
+                    "createdAt": "2023-02-27T21:29:52.000Z",
+                    "updatedAt": "2023-02-27T21:29:52.000Z",
+                    "User": {
+                      "id_user": 1,
+                      "name": "admin",
+                      "email": "admin@admin.com",
+                      "password": "$2a$10$xzMrCRtST3WU6Uid6EC0Cu33RtpNlulI12Ey0TPwH5j49CEzUDMha",
+                      "scope": "admin",
+                      "createdAt": "2023-02-27T21:29:52.000Z",
+                      "updatedAt": "2023-02-27T21:29:52.000Z"
+                    }
+                  },
+                  {
+                    "id_purchase": 2,
+                    "user_id": 2,
+                    "total": "558.85",
+                    "createdAt": "2023-02-27T21:29:52.000Z",
+                    "updatedAt": "2023-02-27T21:29:52.000Z",
+                    "User": {
+                      "id_user": 2,
+                      "name": "Cliente Teste",
+                      "email": "cliente@cliente.com",
+                      "password": "$2a$10$FqCZADE/BPah3Ebp1jkTg.uXKBOXDnOEBuUbMwwHEgQp.67duPkN.",
+                      "scope": "client",
+                      "createdAt": "2023-02-27T21:29:52.000Z",
+                      "updatedAt": "2023-02-27T21:29:52.000Z"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "500": {
+            "description": "Server side error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Purchase"
+        ],
+        "summary": "Sends to server Purchase data",
+        "operationId": "makePurchases",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              },
+              "example": {
+                "total": 420.69,
+                "user_id": 1
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Purchase"
+                },
+                "example": {
+                  "id_purchase": 1,
+                  "user_id": 1,
+                  "total": "393.73",
+                  "createdAt": "2023-02-27T21:29:52.000Z",
+                  "updatedAt": "2023-02-27T21:29:52.000Z"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server side error"
+          }
+        }
+      }
+    },
+    "/purchase/{id_purchase}": {
+      "get": {
+        "tags": [
+          "Purchase",
+          "Admin"
+        ],
+        "summary": "Returns a Purchase object",
+        "operationId": "getOnePurchase",
+        "parameters": [
+          {
+            "name": "id_purchase",
+            "in": "path",
+            "description": "Purchase ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Purchase"
+                },
+                "example": {
+                  "id_purchase": 1,
+                  "user_id": 1,
+                  "total": "393.73",
+                  "createdAt": "2023-02-27T21:29:52.000Z",
+                  "updatedAt": "2023-02-27T21:29:52.000Z",
+                  "User": {
+                    "id_user": 1,
+                    "name": "admin",
+                    "email": "admin@admin.com",
+                    "password": "$2a$10$xzMrCRtST3WU6Uid6EC0Cu33RtpNlulI12Ey0TPwH5j49CEzUDMha",
+                    "scope": "admin",
+                    "createdAt": "2023-02-27T21:29:52.000Z",
+                    "updatedAt": "2023-02-27T21:29:52.000Z"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested resource not found"
+          },
+          "500": {
+            "description": "Server side error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Purchase",
+          "Admin"
+        ],
+        "summary": "Updates a Purchase",
+        "operationId": "updatePurchase",
+        "parameters": [
+          {
+            "name": "id_purchase",
+            "in": "path",
+            "description": "Purchase ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Purchase"
+              },
+              "example": {
+                "price": 390.12
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Purchase"
+                },
+                "example": {
+                  "id_purchase": 1,
+                  "user_id": 1,
+                  "total": "393.73",
+                  "createdAt": "2023-02-27T21:29:52.000Z",
+                  "updatedAt": "2023-02-27T21:29:52.000Z",
+                  "User": {
+                    "id_user": 1,
+                    "name": "admin",
+                    "email": "admin@admin.com",
+                    "password": "$2a$10$xzMrCRtST3WU6Uid6EC0Cu33RtpNlulI12Ey0TPwH5j49CEzUDMha",
+                    "scope": "admin",
+                    "createdAt": "2023-02-27T21:29:52.000Z",
+                    "updatedAt": "2023-02-27T21:29:52.000Z"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested resource not found"
+          },
+          "500": {
+            "description": "Server side error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Purchase",
+          "Admin"
+        ],
+        "summary": "Deletes a Purchase",
+        "operationId": "deletePurchase",
+        "parameters": [
+          {
+            "name": "id_purchase",
+            "in": "path",
+            "description": "Purchase ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Request recieved and understood, but no need to send data back"
+          },
+          "401": {
+            "description": "Access token is missing or invalid"
+          },
+          "404": {
+            "description": "Requested resource not found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/category": {
@@ -254,6 +860,9 @@
                 ]
               }
             }
+          },
+          "500": {
+            "description": "Server side error"
           }
         }
       },
@@ -488,14 +1097,6 @@
           },
           "name": {
             "type": "string"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
           }
         }
       },
@@ -526,15 +1127,72 @@
           },
           "scope": {
             "type": "string"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
           }
+        }
+      },
+      "ArrayUser": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/User"
+        }
+      },
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id_product": {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "photo": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number",
+            "format": "float"
+          },
+          "description": {
+            "type": "string"
+          },
+          "category_id": {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ArrayProduct": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Product"
+        }
+      },
+      "Purchase": {
+        "type": "object",
+        "properties": {
+          "id_purchase": {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int64"
+          },
+          "user_id": {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int64"
+          },
+          "total": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "ArrayPurchase": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Purchase"
         }
       },
       "Login": {
