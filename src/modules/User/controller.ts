@@ -10,14 +10,14 @@ export default class controller {
 
       const checkEmail = await User.count({ where: { email } });
       if (checkEmail) {
-        return res.status(409).json("Email já cadastrado");
+        return res.status(409).json('Email já cadastrado');
       }
 
       const newUser = await User.create({
         name,
         email,
         password: criptoPassword,
-        scope: "client"
+        scope,
       });
       return res.status(201).json(newUser);
     } catch {
@@ -64,7 +64,7 @@ export default class controller {
 
       const checkEmail = await User.count({ where: { email } });
       if (checkEmail) {
-        return res.status(409).json("Email já cadastrado");
+        return res.status(409).json('Email já cadastrado');
       }
 
       const checkUser = await User.findByPk(id);
