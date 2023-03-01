@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { Purchase, User } from '../../models';
+import { Purchase, User } from '../models';
 
-export default class controller {
+export default class purchaseController {
   static create = async (req: Request, res: Response): Promise<Response> => {
     try {
       const { total, user_id } = req.body;

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { Category, Product } from "../../models/";
+import { Category, Product } from "../models";
 
-const controller = {
+const productController = {
   async create(req: Request, res: Response) {
     try {
       const { name, photo, price, description, category_id } = req.body;
@@ -20,7 +20,9 @@ const controller = {
 
   async findAll(req: Request, res: Response) {
     try {
-      const findProducts = await Product.findAll({ include: Category });
+      const findProducts = await Product.findAll({ 
+        include: Category 
+      });
       return res.status(200).json(findProducts);
     } catch (error) {
       return res.status(500).json("Não foi possível realizar a ação");
@@ -96,4 +98,4 @@ const controller = {
   },
 };
 
-export default controller;
+export default productController;

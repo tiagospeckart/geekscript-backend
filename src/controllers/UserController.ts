@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import { Purchase, User } from '../../models/';
+import { Purchase, User } from '../models';
 import bcrypt from 'bcryptjs';
 
-export default class controller {
+export default class userController {
   static create = async (req: Request, res: Response): Promise<Response> => {
     try {
       const { name, email, password, scope } = req.body;

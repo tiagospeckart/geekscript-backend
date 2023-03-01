@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
-import User from '../../models/User';
+import User from '../models/User';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import key from '../../configs/jwtKey';
+import key from '../configs/jwtKey';
 
-export default class controller {
+export default class loginController {
   static login = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
     const { email, password } = req.body;
 
