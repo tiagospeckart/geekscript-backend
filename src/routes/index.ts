@@ -9,12 +9,12 @@ import * as swaggerDocument  from "../api-docs/swagger.json";
 
 const router = Router();
 
-router.use('/', product)
+router.use('/home', product)
 router.use('/user', user);
 router.use('/product', product);
 router.use('/category',category);
 router.use('/purchase', purchase);
 router.use('/login', login);
-router.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+router.use('/api_doc', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 export default router

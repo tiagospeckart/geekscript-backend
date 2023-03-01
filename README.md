@@ -38,13 +38,13 @@ Final project of [Gama Academy](https://www.gama.academy/) Webdevelopment course
 ### Running locally
 
 1. Run server with `npm run dev`
-2. Acess URL `localhost:5000/swagger` 
+2. Acess URL `localhost:{ENV.APP_PORT}/api_doc` 
 
-For ease of use, I *really* recommend the **Swagger Viewer** VS Code Extension. 
+For ease of use, I *strongly* recommend the **Swagger Viewer** VS Code Extension. 
 
-To start:
-Open the swagger file (at /api-docs) and either:
-- Press F1 -> Run the Command `Preview Swagger` 
+To start it:
+Open the `swagger.json` file (at /api-docs) and either:
+- Press F1 -> Run `Preview Swagger` 
 - Press Shift + Alt + P
 - Right click file in explorer panel and click `Preview Swagger`
 
