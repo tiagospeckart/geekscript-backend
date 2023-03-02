@@ -4,6 +4,7 @@ import purchase from './purchase';
 import login from './login';
 import category from './category';
 import user from './user';
+import checkout from './checkout';
 import swaggerUi from 'swagger-ui-express';
 import * as swaggerDocument  from "../api-docs/swagger.json";
 
@@ -15,6 +16,7 @@ router.use('/product', product);
 router.use('/category',category);
 router.use('/purchase', purchase);
 router.use('/login', login);
+router.use('/checkout', checkout);
 router.use('/api_doc', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 export default router
