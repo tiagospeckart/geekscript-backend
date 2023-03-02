@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import product from './product';
+import productController from '../controllers/ProductController';
 import purchase from './purchase';
 import login from './login';
 import category from './category';
@@ -9,7 +10,7 @@ import * as swaggerDocument  from "../api-docs/swagger.json";
 
 const router = Router();
 
-router.use('/home', product)
+router.use('/home', productController.findAll);
 router.use('/user', user);
 router.use('/product', product);
 router.use('/category',category);
