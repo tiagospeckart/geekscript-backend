@@ -1,102 +1,147 @@
 {
-  "openapi" : "3.0.0",
-  "info" : {
-    "title" : "geek_script",
-    "description" : "An API for a basic ecommerce themed around nerdy products.",
-    "version" : "1.0.4"
+  "openapi": "3.0.0",
+  "info": {
+    "title": "geek_script",
+    "description": "An API for a basic ecommerce themed around nerdy products. The final project of [Gama Academy](https://gama.academy/) webdevelopment course. Current version is still in development.\n\nUseful links:\n  - [Backend project repository](https://github.com/tiagospeckart/geekstore-backend)\n  - [Frontend project repository](https://github.com/GabrielGameDev/geek-script-front)",
+    "contact": {
+      "name": "API Support",
+      "email": "tiagospeckart@gmail.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/license/mit/"
+    },
+    "version": "1.0.6"
   },
-  "servers" : [ {
-    "url" : "http://localhost:5000",
-    "description" : "Localhost for Development"
-  } ],
-  "tags" : [ {
-    "name" : "Register",
-    "description" : "Register into the system"
-  }, {
-    "name" : "Login",
-    "description" : "Logging interface"
-  }, {
-    "name" : "User",
-    "description" : "Api for users in the system"
-  }, {
-    "name" : "Category",
-    "description" : "Api for categories in the system"
-  } ],
-  "paths" : {
-    "/login" : {
-      "post" : {
-        "tags" : [ "Login" ],
-        "summary" : "Login route",
-        "operationId" : "login",
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/login_body"
-              }
-            }
-          },
-          "required" : true
-        },
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          }
-        }
-      }
+  "servers": [
+    {
+      "url": "http://localhost:5000",
+      "description": "Localhost for Development"
     },
-    "/user" : {
-      "post" : {
-        "tags" : [ "Register", "User" ],
-        "summary" : "Creates a new User",
-        "operationId" : "createCategory",
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/User"
+    {
+      "url": "http://localhost:6000",
+      "description": "test"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Register",
+      "description": "Create a Client account"
+    },
+    {
+      "name": "Login",
+      "description": "Log into the system with your account"
+    },
+    {
+      "name": "User",
+      "description": "Operations for users"
+    },
+    {
+      "name": "Product",
+      "description": "Finding products and adding them to the cart"
+    },
+    {
+      "name": "Purchase",
+      "description": "Buying selected products"
+    },
+    {
+      "name": "Category",
+      "description": "Categories for products"
+    },
+    {
+      "name": "Admin",
+      "description": "Admin panel interfaces"
+    }
+  ],
+  "paths": {
+    "/login": {
+      "post": {
+        "tags": [
+          "Login"
+        ],
+        "summary": "Login route",
+        "operationId": "login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Login"
               },
-              "example" : {
-                "name" : "Test Name",
-                "email" : "test@email.com",
-                "password" : "testpass123"
+              "example": {
+                "email": "test@email.com",
+                "password": "testpass123"
               }
             }
           },
-          "required" : true
+          "required": true
         },
-        "responses" : {
-          "201" : {
-            "description" : "Created",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/User"
-                },
-                "example" : {
-                  "id_user" : 3,
-                  "name" : "Test Name",
-                  "email" : "test@email.com",
-                  "password" : "testpass123",
-                  "isAdm" : 0,
-                  "createdAt" : "2023-02-24T13:01:02.700Z",
-                  "updatedAt" : "2023-02-24T13:01:02.700Z"
+        "responses": {
+          "200": {
+            "description": "Sucessful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoxLCJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGFkbWluLmNvbSIsImlzQWRtIjoxLCJpYXQiOjE2Nzc0NTM3OTYsImV4cCI6MTY4MDA0NTc5Nn0.WyvuOzLN8NEM9tKgjY2a70KU9XVGeYYufhIDs35gGPg"
                 }
               }
             }
           },
-          "400" : {
-            "description" : "Request not understood, revise syntax"
+          "401": {
+            "description": "Unauthorized"
           },
-          "409" : {
-            "description" : "Duplicated entry",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Error"
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/user/register": {
+      "post": {
+        "tags": [
+          "Register",
+          "User"
+        ],
+        "summary": "Creates a new User",
+        "operationId": "registerUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              },
+              "example": {
+                "name": "Test Name",
+                "email": "test@email.com",
+                "password": "testpass123"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request not understood, revise syntax"
+          },
+          "409": {
+            "description": "Duplicated entry",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
                 },
-                "example" : {
-                  "message" : "Usuário já existente"
+                "example": {
+                  "message": "Usuário já existente"
                 }
               }
             }
@@ -104,384 +149,1036 @@
         }
       }
     },
-    "/user/{id}" : {
-      "get" : {
-        "tags" : [ "User" ],
-        "summary" : "Returns a User by ID",
-        "operationId" : "getOneUser",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "path",
-          "description" : "User ID",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "minimum" : 1,
-            "type" : "integer",
-            "format" : "int64"
+    "/user/{id_user}": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Returns a User by ID",
+        "operationId": "getOneUser",
+        "parameters": [
+          {
+            "name": "id_user",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "format": "int64"
+            }
           }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/User"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
                 },
-                "example" : {
-                  "id_user" : 3,
-                  "name" : "Test Name",
-                  "email" : "test@email.com",
-                  "password" : "testpass123",
-                  "isAdm" : 0,
-                  "createdAt" : "2023-02-24T13:01:02.700Z",
-                  "updatedAt" : "2023-02-24T13:01:02.700Z"
+                "example": {
+                  "id_user": 3,
+                  "name": "Test Name",
+                  "email": "test@email.com",
+                  "password": "testpass123",
+                  "isAdm": 0,
+                  "createdAt": "2023-02-24T13:01:02.700Z",
+                  "updatedAt": "2023-02-24T13:01:02.700Z"
                 }
               }
             }
           },
-          "404" : {
-            "description" : "Requested resource not found"
-          }
-        }
-      }
-    },
-    "/category" : {
-      "get" : {
-        "tags" : [ "Category" ],
-        "summary" : "Returns all the Categories as an array of objects",
-        "operationId" : "getAllCategory",
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ArrayCategory"
-                },
-                "example" : [ {
-                  "id_category" : 1,
-                  "name" : "Vestuário",
-                  "createdAt" : "2023-02-24T13:01:02.700Z",
-                  "updatedAt" : "2023-02-24T13:01:02.700Z"
-                }, {
-                  "id_category" : 2,
-                  "name" : "Games",
-                  "createdAt" : "2023-02-24T13:01:02.700Z",
-                  "updatedAt" : "2023-02-24T13:01:02.700Z"
-                } ]
-              }
-            }
+          "404": {
+            "description": "Requested resource not found"
           }
         }
       },
-      "post" : {
-        "tags" : [ "Category" ],
-        "summary" : "Creates a new Category",
-        "operationId" : "createUser",
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/User"
-              },
-              "example" : {
-                "name" : "Board Game"
-              }
-            }
-          },
-          "required" : true
-        },
-        "responses" : {
-          "201" : {
-            "description" : "Created",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Category"
-                },
-                "example" : {
-                  "id_category" : 3,
-                  "name" : "Board Game",
-                  "createdAt" : "2023-02-24T13:01:02.700Z",
-                  "updatedAt" : "2023-02-24T13:01:02.700Z"
-                }
-              }
-            }
-          },
-          "400" : {
-            "description" : "Request not understood, revise syntax"
-          },
-          "401" : {
-            "description" : "Access token is missing or invalid"
-          },
-          "409" : {
-            "description" : "Duplicated entry",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Error"
-                },
-                "example" : {
-                  "message" : "categoria já existente"
-                }
-              }
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Updates a User by ID",
+        "operationId": "updateOneUser",
+        "parameters": [
+          {
+            "name": "id_user",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "format": "int64"
             }
           }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          },
+          "required": true
         },
-        "security" : [ {
-          "bearerAuth" : [ ]
-        } ]
-      }
-    },
-    "/category/{id}" : {
-      "get" : {
-        "tags" : [ "Category" ],
-        "summary" : "Returns a Category by ID",
-        "operationId" : "getOneCategory",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "path",
-          "description" : "Category ID",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "minimum" : 1,
-            "type" : "integer",
-            "format" : "int64"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Category"
+        "responses": {
+          "200": {
+            "description": "User updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
                 },
-                "example" : {
-                  "id_category" : 1,
-                  "name" : "Jogos de Tabuleiro",
-                  "createdAt" : "2023-02-24T13:01:02.700Z",
-                  "updatedAt" : "2023-02-24T13:01:02.700Z"
+                "example": {
+                  "id_user": 3,
+                  "name": "Tester Alter",
+                  "email": "email@tester.com",
+                  "password": "$2a$10$1Rih7rJk0iWrK0zK.Zfxwu7ADhZW5c1kWQMrEtHx.d4Jb/ekHUpuK",
+                  "isAdm": 0,
+                  "createdAt": "2023-02-24T13:01:02.700Z",
+                  "updatedAt": "2023-02-24T13:01:02.700Z"
                 }
               }
             }
           },
-          "404" : {
-            "description" : "Requested resource not found"
+          "404": {
+            "description": "Id not found"
+          },
+          "500": {
+            "description": "Server side error"
           }
         }
       },
-      "put" : {
-        "tags" : [ "Category" ],
-        "summary" : "Updates a Category by ID",
-        "operationId" : "updateCategory",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "path",
-          "description" : "Category ID",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "minimum" : 1,
-            "type" : "integer",
-            "format" : "int64"
-          },
-          "example" : 1
-        } ],
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/Category"
-              },
-              "example" : {
-                "name" : "Board Game"
-              }
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Updates a User by ID",
+        "operationId": "deleteOneUser",
+        "parameters": [
+          {
+            "name": "id_user",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "format": "int64"
             }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content"
           },
-          "required" : true
-        },
-        "responses" : {
-          "200" : {
-            "description" : "A JSON Category object",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Category"
-                },
-                "example" : {
-                  "id_category" : 1,
-                  "name" : "Board Game",
-                  "createdAt" : "2023-02-24T13:01:02.700Z",
-                  "updatedAt" : "2023-02-25T13:01:02.700Z"
+          "404": {
+            "description": "Id not found"
+          },
+          "500": {
+            "description": "Server side error"
+          }
+        }
+      }
+    },
+    "/user/admin": {
+      "get": {
+        "tags": [
+          "Admin",
+          "User"
+        ],
+        "summary": "Returns a list of Users",
+        "operationId": "getAllUser",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayUser"
                 }
               }
             }
           },
-          "400" : {
-            "description" : "Request not understood, revise syntax"
-          },
-          "401" : {
-            "description" : "Access token is missing or invalid"
-          },
-          "404" : {
-            "description" : "Requested resource not found"
+          "500": {
+            "description": "Server side error"
           }
         },
-        "security" : [ {
-          "bearerAuth" : [ ]
-        } ]
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/product/catalog": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Returns a list of Products",
+        "operationId": "getAllProducts",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayProduct"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server side error"
+          }
+        }
+      }
+    },
+    "/product/{id_product}": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Returns a Product object",
+        "operationId": "getOneProduct",
+        "parameters": [
+          {
+            "name": "id_product",
+            "in": "path",
+            "description": "Product ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested resource not found"
+          },
+          "500": {
+            "description": "Server side error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/product/admin": {
+      "post": {
+        "tags": [
+          "Product",
+          "Admin"
+        ],
+        "summary": "Creates a new Product",
+        "operationId": "createProduct",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              },
+              "example": {
+                "name": "string",
+                "photo": "string",
+                "price": 34.12,
+                "description": "string",
+                "category_id": 1
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request not understood, revise syntax"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/product/admin/{id_product}": {
+      "put": {
+        "tags": [
+          "Product",
+          "Admin"
+        ],
+        "summary": "Updates a Product",
+        "operationId": "updateProduct",
+        "parameters": [
+          {
+            "name": "id_product",
+            "in": "path",
+            "description": "Product ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Product"
+              },
+              "example": {
+                "price": 390.12
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested resource not found"
+          },
+          "500": {
+            "description": "Server side error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       },
-      "delete" : {
-        "tags" : [ "Category" ],
-        "summary" : "Deletes a Category by ID",
-        "operationId" : "removeCategory",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "path",
-          "description" : "Category ID",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "minimum" : 1,
-            "type" : "integer",
-            "format" : "int64"
+      "delete": {
+        "tags": [
+          "Product",
+          "Admin"
+        ],
+        "summary": "Deletes a Product",
+        "operationId": "deleteProduct",
+        "parameters": [
+          {
+            "name": "id_product",
+            "in": "path",
+            "description": "Product ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Request recieved and understood, but no need to send data back"
           },
-          "example" : 1
-        } ],
-        "responses" : {
-          "204" : {
-            "description" : "Request recieved and understood, but no need to send data back"
+          "401": {
+            "description": "Access token is missing or invalid"
           },
-          "401" : {
-            "description" : "Access token is missing or invalid"
-          },
-          "404" : {
-            "description" : "Requested resource not found"
+          "404": {
+            "description": "Requested resource not found"
           }
         },
-        "security" : [ {
-          "bearerAuth" : [ ]
-        } ]
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/purchase/{id_user}": {
+      "get": {
+        "tags": [
+          "Purchase"
+        ],
+        "summary": "Returns an array of purchases made by user",
+        "operationId": "getClientPurchases",
+        "parameters": [
+          {
+            "name": "id_user",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Purchase"
+                },
+                "example": {
+                  "id_purchase": 1,
+                  "user_id": 1,
+                  "total": "393.73",
+                  "createdAt": "2023-02-27T21:29:52.000Z",
+                  "updatedAt": "2023-02-27T21:29:52.000Z",
+                  "User": {
+                    "id_user": 1,
+                    "name": "admin",
+                    "email": "admin@admin.com",
+                    "password": "$2a$10$xzMrCRtST3WU6Uid6EC0Cu33RtpNlulI12Ey0TPwH5j49CEzUDMha",
+                    "scope": "admin",
+                    "createdAt": "2023-02-27T21:29:52.000Z",
+                    "updatedAt": "2023-02-27T21:29:52.000Z"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested resource not found"
+          },
+          "500": {
+            "description": "Server side error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/purchase/admin": {
+      "get": {
+        "tags": [
+          "Purchase",
+          "Admin"
+        ],
+        "summary": "Returns an array of Purchases",
+        "operationId": "getAllPurchases",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayPurchase"
+                },
+                "example": [
+                  {
+                    "id_purchase": 1,
+                    "user_id": 1,
+                    "total": "393.73",
+                    "createdAt": "2023-02-27T21:29:52.000Z",
+                    "updatedAt": "2023-02-27T21:29:52.000Z",
+                    "User": {
+                      "id_user": 1,
+                      "name": "admin",
+                      "email": "admin@admin.com",
+                      "password": "$2a$10$xzMrCRtST3WU6Uid6EC0Cu33RtpNlulI12Ey0TPwH5j49CEzUDMha",
+                      "scope": "admin",
+                      "createdAt": "2023-02-27T21:29:52.000Z",
+                      "updatedAt": "2023-02-27T21:29:52.000Z"
+                    }
+                  },
+                  {
+                    "id_purchase": 2,
+                    "user_id": 2,
+                    "total": "558.85",
+                    "createdAt": "2023-02-27T21:29:52.000Z",
+                    "updatedAt": "2023-02-27T21:29:52.000Z",
+                    "User": {
+                      "id_user": 2,
+                      "name": "Cliente Teste",
+                      "email": "cliente@cliente.com",
+                      "password": "$2a$10$FqCZADE/BPah3Ebp1jkTg.uXKBOXDnOEBuUbMwwHEgQp.67duPkN.",
+                      "scope": "client",
+                      "createdAt": "2023-02-27T21:29:52.000Z",
+                      "updatedAt": "2023-02-27T21:29:52.000Z"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "500": {
+            "description": "Server side error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/purchase/admin/{id_purchase}": {
+      "put": {
+        "tags": [
+          "Purchase",
+          "Admin"
+        ],
+        "summary": "Updates a Purchase",
+        "operationId": "updatePurchase",
+        "parameters": [
+          {
+            "name": "id_purchase",
+            "in": "path",
+            "description": "Purchase ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Purchase"
+              },
+              "example": {
+                "total": 390.12
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Purchase"
+                },
+                "example": {
+                  "id_purchase": 1,
+                  "user_id": 1,
+                  "total": "393.73",
+                  "createdAt": "2023-02-27T21:29:52.000Z",
+                  "updatedAt": "2023-02-27T21:29:52.000Z",
+                  "User": {
+                    "id_user": 1,
+                    "name": "admin",
+                    "email": "admin@admin.com",
+                    "password": "$2a$10$xzMrCRtST3WU6Uid6EC0Cu33RtpNlulI12Ey0TPwH5j49CEzUDMha",
+                    "scope": "admin",
+                    "createdAt": "2023-02-27T21:29:52.000Z",
+                    "updatedAt": "2023-02-27T21:29:52.000Z"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested resource not found"
+          },
+          "500": {
+            "description": "Server side error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Purchase",
+          "Admin"
+        ],
+        "summary": "Deletes a Purchase",
+        "operationId": "deletePurchase",
+        "parameters": [
+          {
+            "name": "id_purchase",
+            "in": "path",
+            "description": "Purchase ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Request recieved and understood, but no need to send data back"
+          },
+          "401": {
+            "description": "Access token is missing or invalid"
+          },
+          "404": {
+            "description": "Requested resource not found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/category/catalog": {
+      "get": {
+        "tags": [
+          "Category"
+        ],
+        "summary": "Returns all the Categories as an array of objects",
+        "operationId": "getAllCategory",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayCategory"
+                },
+                "example": [
+                  {
+                    "id_category": 1,
+                    "name": "Vestuário",
+                    "createdAt": "2023-02-24T13:01:02.700Z",
+                    "updatedAt": "2023-02-24T13:01:02.700Z"
+                  },
+                  {
+                    "id_category": 2,
+                    "name": "Games",
+                    "createdAt": "2023-02-24T13:01:02.700Z",
+                    "updatedAt": "2023-02-24T13:01:02.700Z"
+                  }
+                ]
+              }
+            }
+          },
+          "500": {
+            "description": "Server side error"
+          }
+        }
+      }
+    },
+    "/category/{id_category}": {
+      "get": {
+        "tags": [
+          "Category"
+        ],
+        "summary": "Returns a Category by ID",
+        "operationId": "getOneCategory",
+        "parameters": [
+          {
+            "name": "id_category",
+            "in": "path",
+            "description": "Category ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Category"
+                },
+                "example": {
+                  "id_category": 1,
+                  "name": "Jogos de Tabuleiro",
+                  "createdAt": "2023-02-24T13:01:02.700Z",
+                  "updatedAt": "2023-02-24T13:01:02.700Z"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested resource not found"
+          }
+        }
+      }
+    },
+    "/category/admin": {
+      "post": {
+        "tags": [
+          "Category",
+          "Admin"
+        ],
+        "summary": "Creates a new Category",
+        "operationId": "createCategory",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Category"
+              },
+              "example": {
+                "name": "Board Game"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Category"
+                },
+                "example": {
+                  "id_category": 3,
+                  "name": "Board Game",
+                  "createdAt": "2023-02-24T13:01:02.700Z",
+                  "updatedAt": "2023-02-24T13:01:02.700Z"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request not understood, revise syntax"
+          },
+          "401": {
+            "description": "Access token is missing or invalid"
+          },
+          "409": {
+            "description": "Duplicated entry",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "categoria já existente"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/category/admin/{id_category}": {
+      "put": {
+        "tags": [
+          "Category",
+          "Admin"
+        ],
+        "summary": "Updates a Category by ID",
+        "operationId": "updateCategory",
+        "parameters": [
+          {
+            "name": "id_category",
+            "in": "path",
+            "description": "Category ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 1
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Category"
+              },
+              "example": {
+                "name": "Board Game"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A JSON Category object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Category"
+                },
+                "example": {
+                  "id_category": 1,
+                  "name": "Board Game",
+                  "createdAt": "2023-02-24T13:01:02.700Z",
+                  "updatedAt": "2023-02-25T13:01:02.700Z"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request not understood, revise syntax"
+          },
+          "401": {
+            "description": "Access token is missing or invalid"
+          },
+          "404": {
+            "description": "Requested resource not found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Category",
+          "Admin"
+        ],
+        "summary": "Deletes a Category by ID",
+        "operationId": "removeCategory",
+        "parameters": [
+          {
+            "name": "id_category",
+            "in": "path",
+            "description": "Category ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 1
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Request recieved and understood, but no need to send data back"
+          },
+          "401": {
+            "description": "Access token is missing or invalid"
+          },
+          "404": {
+            "description": "Requested resource not found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     }
   },
-  "components" : {
-    "schemas" : {
-      "Category" : {
-        "type" : "object",
-        "properties" : {
-          "id_category" : {
-            "minimum" : 1,
-            "type" : "integer",
-            "format" : "int64"
+  "components": {
+    "schemas": {
+      "Category": {
+        "type": "object",
+        "properties": {
+          "id_category": {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int64"
           },
-          "name" : {
-            "type" : "string"
-          },
-          "createdAt" : {
-            "type" : "string",
-            "format" : "date-time"
-          },
-          "updatedAt" : {
-            "type" : "string",
-            "format" : "date-time"
+          "name": {
+            "type": "string"
           }
         }
       },
-      "ArrayCategory" : {
-        "type" : "array",
-        "items" : {
-          "$ref" : "#/components/schemas/Category"
+      "ArrayCategory": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Category"
         }
       },
-      "User" : {
-        "type" : "object",
-        "properties" : {
-          "id_user" : {
-            "minimum" : 1,
-            "type" : "integer",
-            "format" : "int64"
+      "User": {
+        "type": "object",
+        "properties": {
+          "id_user": {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int64"
           },
-          "name" : {
-            "type" : "string"
+          "name": {
+            "type": "string"
           },
-          "email" : {
-            "type" : "string",
-            "format" : "email"
+          "email": {
+            "type": "string",
+            "format": "email"
           },
-          "password" : {
-            "type" : "string",
-            "format" : "password"
+          "password": {
+            "type": "string",
+            "format": "password"
           },
-          "isAdm" : {
-            "type" : "number"
-          },
-          "createdAt" : {
-            "type" : "string",
-            "format" : "date-time"
-          },
-          "updatedAt" : {
-            "type" : "string",
-            "format" : "date-time"
+          "scope": {
+            "type": "string"
           }
         }
       },
-      "Error" : {
-        "type" : "string",
-        "properties" : {
-          "message" : {
-            "type" : "string"
+      "ArrayUser": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/User"
+        }
+      },
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id_product": {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "photo": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number",
+            "format": "float"
+          },
+          "description": {
+            "type": "string"
+          },
+          "category_id": {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
-      "login_body" : {
-        "type" : "object",
-        "properties" : {
-          "email" : {
-            "type" : "string",
-            "format" : "email"
+      "ArrayProduct": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Product"
+        }
+      },
+      "Purchase": {
+        "type": "object",
+        "properties": {
+          "id_purchase": {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int64"
           },
-          "password" : {
-            "type" : "string",
-            "format" : "password"
+          "user_id": {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int64"
+          },
+          "total": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "ArrayPurchase": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Purchase"
+        }
+      },
+      "Login": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
           }
         },
-        "example" : {
-          "email" : "test@email.com",
-          "password" : "testpass123"
+        "example": {
+          "email": "admin@admin.com",
+          "password": "admin123"
+        }
+      },
+      "Error": {
+        "type": "string",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
         }
       }
     },
-    "responses" : {
-      "UnauthorizedError" : {
-        "description" : "Access token is missing or invalid"
-      },
-      "NotFound" : {
-        "description" : "Requested resource not found"
-      },
-      "BadRequest" : {
-        "description" : "Request not understood, revise syntax"
-      },
-      "NoContent" : {
-        "description" : "Request recieved and understood, but no need to send data back"
-      },
-      "UnauthorizedResponse" : {
-        "description" : "Invalid e-mail or password, please try again"
-      }
-    },
-    "securitySchemes" : {
-      "bearerAuth" : {
-        "type" : "http",
-        "scheme" : "bearer",
-        "bearerFormat" : "JWT"
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }

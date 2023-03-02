@@ -1,17 +1,23 @@
 import { Request, Response } from 'express';
-import { Purchase, User } from '../../models/';
+import { Purchase, User } from '../models';
 import bcrypt from 'bcryptjs';
 
-export default class controller {
+export default class userController {
   static create = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const { name, email, password } = req.body;
+      const { name, email, password, scope } = req.body;
       const criptoPassword: string = bcrypt.hashSync(password, 10);
+
+      const checkEmail = await User.count({ where: { email } });
+      if (checkEmail) {
+        return res.status(409).json("Email já cadastrado");
+      }
 
       const newUser = await User.create({
         name,
         email,
-        password: criptoPassword
+        password: criptoPassword,
+        scope: "client"
       });
       return res.status(201).json(newUser);
     } catch {
@@ -53,13 +59,13 @@ export default class controller {
   static update = async (req: Request, res: Response): Promise<Response> => {
     try {
       const id: string = req.params.id;
-      const { name, email, password, scope } = req.body;
-      const criptoPassword: string = bcrypt.hashSync(password, 10);
-
       const checkUser = await User.findByPk(id);
       if (!checkUser) {
         return res.status(404).json('Id não encontrado');
       }
+
+      const { name, email, password, scope } = req.body;
+      const criptoPassword: string = bcrypt.hashSync(password, 10);
 
       await User.update(
         {

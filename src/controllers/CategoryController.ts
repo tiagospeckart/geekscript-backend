@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { Category } from "../../models/";
+import { Category } from "../models";
 
-const controller = {
+const categoryController = {
   async create(req: Request, res: Response) {
     try {
       const { name } = req.body;
@@ -98,4 +98,4 @@ const controller = {
   },
 };
 
-export default controller;
+export default categoryController;

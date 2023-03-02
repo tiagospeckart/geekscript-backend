@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
-import User from '../../models/User';
+import User from '../models/User';
 import bcrypt from 'bcryptjs';
-import * as jwt from 'jsonwebtoken';
-import key from '../../configs/jwtKey';
+import jwt from 'jsonwebtoken';
+import key from '../configs/jwtKey';
 
-export default class controller {
+export default class loginController {
   static login = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
     const { email, password } = req.body;
 
@@ -33,8 +33,10 @@ export default class controller {
         key.privateKey,
         { expiresIn: '30 days' }
       );
+
+      // Criar uma função para selecionar o id e retornar na resposta
       
-      return res.status(200).json(token);
+      return res.status(200).json({ id: dataUser.id_user, token: token });
     } catch (error) {
       return res.status(500).json('Não foi possível realizar a ação');
     }
