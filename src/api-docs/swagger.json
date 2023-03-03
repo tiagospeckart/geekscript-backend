@@ -82,7 +82,7 @@
               "application/json": {
                 "schema": {
                   "type": "string",
-                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoxLCJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGFkbWluLmNvbSIsImlzQWRtIjoxLCJpYXQiOjE2Nzc0NTM3OTYsImV4cCI6MTY4MDA0NTc5Nn0.WyvuOzLN8NEM9tKgjY2a70KU9XVGeYYufhIDs35gGPg"
+                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoxLCJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGFkbWluLmNvbSIsInNjb3BlIjoiYWRtaW4iLCJpYXQiOjE2Nzc3OTk4OTUsImV4cCI6MTY4MDM5MTg5NX0.QRbfJMwiEtvW7FU8cJBaw28n79B6OV50B4wgDXw2cKg"
                 }
               }
             }
@@ -194,7 +194,12 @@
           "404": {
             "description": "Requested resource not found"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       },
       "put": {
         "tags": [
@@ -253,7 +258,11 @@
           "500": {
             "description": "Server side error"
           }
-        }
+        },"security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       },
       "delete": {
         "tags": [
@@ -286,7 +295,11 @@
           "500": {
             "description": "Server side error"
           }
-        }
+        } ,"security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/user/admin": {

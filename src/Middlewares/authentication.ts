@@ -1,7 +1,7 @@
 import { expressjwt } from 'express-jwt';
-import key from '../configs/jwtKey';
+import 'dotenv/config';
 
 export default expressjwt({
-  secret: key.privateKey,
+  secret: process.env.SECRET as string,
   algorithms: ['HS256'],
 });
