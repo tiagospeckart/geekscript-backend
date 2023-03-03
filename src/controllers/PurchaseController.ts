@@ -18,7 +18,7 @@ export default class purchaseController {
   static findAll = async (req: Request, res: Response): Promise<Response> => {
     try {
       const findPurchase = await Purchase.findAll({
-        include: User,
+        include: {model: User, attributes: { exclude: ['password','email', 'scope', 'createdAt', 'updatedAt']}},
       });
 
       return res.status(200).json(findPurchase);

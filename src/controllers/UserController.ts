@@ -28,13 +28,27 @@ export default class userController {
   static findAll = async (req: Request, res: Response): Promise<Response> => {
     try {
       const findUsers = await User.findAll({
-        include: Purchase,
+        attributes: {exclude:["password"]}
       });
       return res.status(200).json(findUsers);
     } catch (error) {
       return res.status(500).json('Não foi possível realizar a ação');
     }
   };
+
+  static findAllUserPurchase = async (req: Request, res: Response): Promise<Response> => {
+    const { id } = req.params;
+    try {
+      const findUsers = await User.findByPk(id, {
+        include: Purchase,
+        attributes: {exclude:["password", "scope", "email"]}
+      })
+      return res.status(200).json(findUsers);
+    } catch (error) {
+      return res.status(500).json('Não foi possível realizar a ação');
+    }
+  };
+
 
   static findOne = async (req: Request, res: Response): Promise<Response> => {
     try {

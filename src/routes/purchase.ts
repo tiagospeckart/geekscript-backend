@@ -2,6 +2,7 @@ import { Router } from 'express';
 import purchaseController from '../controllers/PurchaseController';
 import updateValidation from "../Validations/User/update";
 import userAuthentication from "../Middlewares/authentication";
+import userController from '../controllers/UserController';
 
 const router = Router();
 
@@ -11,7 +12,7 @@ const router = Router();
 // Passar middleware de Adm no getAll
 
 router.get('/admin', userAuthentication, purchaseController.findAll);
-router.get('/:id', userAuthentication, purchaseController.findOne);
+router.get('/:id', userAuthentication, userController.findAllUserPurchase);
 router.put('/admin/:id', userAuthentication, updateValidation, purchaseController.update);
 router.delete('/admin/:id', userAuthentication, purchaseController.delete);
 
