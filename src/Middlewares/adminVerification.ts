@@ -2,11 +2,13 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import 'dotenv/config'
 
+
 export default (req: Request, res: Response, next: NextFunction) => {
   try {
     const authHeader: any = req.headers.authorization;
     const getToken = authHeader.split(' ')[1];
     const verifyToken: any = jwt.verify(getToken, process.env.SECRET as string);
+
   
     if (verifyToken.scope === 'admin') {
       return next();
