@@ -38,7 +38,7 @@ Final project of [Gama Academy](https://www.gama.academy/) Webdevelopment course
 ### Running locally
 
 1. Run server with `npm run dev`
-2. Acess URL `localhost:{ENV.APP_PORT}/api_doc` 
+2. Acess URL `localhost:{ENV.APP_PORT}/api-docs` 
 
 For ease of use, I *strongly* recommend the **Swagger Viewer** VS Code Extension. 
 

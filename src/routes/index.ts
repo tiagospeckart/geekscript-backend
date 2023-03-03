@@ -16,6 +16,7 @@ router.use('/product', product);
 router.use('/category',category);
 router.use('/purchase', purchase);
 router.use('/login', login);
-router.use('/api_doc', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+router.use('/api-docs', swaggerUi.serve);
+router.get('/api-docs', swaggerUi.setup(swaggerDocument));
 
 export default router
