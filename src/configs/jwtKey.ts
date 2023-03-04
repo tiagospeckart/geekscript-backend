@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 export default {
-privateKey: "geekstore-2030"
+  privateKey: process.env.SECRET as string,
 };

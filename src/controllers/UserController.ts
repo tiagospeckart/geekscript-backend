@@ -10,14 +10,14 @@ export default class userController {
 
       const checkEmail = await User.count({ where: { email } });
       if (checkEmail) {
-        return res.status(409).json("Email já cadastrado");
+        return res.status(409).json('Email já cadastrado');
       }
 
       const newUser = await User.create({
         name,
         email,
         password: criptoPassword,
-        scope: "client"
+        scope,
       });
       return res.status(201).json(newUser);
     } catch {
@@ -28,7 +28,20 @@ export default class userController {
   static findAll = async (req: Request, res: Response): Promise<Response> => {
     try {
       const findUsers = await User.findAll({
+        attributes: { exclude: ['password'] },
+      });
+      return res.status(200).json(findUsers);
+    } catch (error) {
+      return res.status(500).json('Não foi possível realizar a ação');
+    }
+  };
+
+  static findAllUserPurchase = async (req: Request, res: Response): Promise<Response> => {
+    const { id } = req.params;
+    try {
+      const findUsers = await User.findByPk(id, {
         include: Purchase,
+        attributes: { exclude: ['password', 'scope', 'email'] },
       });
       return res.status(200).json(findUsers);
     } catch (error) {
@@ -46,9 +59,8 @@ export default class userController {
       }
 
       findUser = await User.findByPk(id, {
-        attributes: {
-          exclude: ['password'],
-        },
+        include: Purchase,
+        attributes: { exclude: ['password'] },
       });
       return res.status(200).json(findUser);
     } catch {
@@ -58,14 +70,14 @@ export default class userController {
 
   static update = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const id: string = req.params.id;
+      const { id } = req.params;
+      const { name, email, password, scope } = req.body;
       const checkUser = await User.findByPk(id);
       if (!checkUser) {
         return res.status(404).json('Id não encontrado');
       }
 
-      const { name, email, password, scope } = req.body;
-      const criptoPassword: string = bcrypt.hashSync(password, 10);
+      const criptoPassword = password ? bcrypt.hashSync(password, 10): checkUser.password;
 
       await User.update(
         {
