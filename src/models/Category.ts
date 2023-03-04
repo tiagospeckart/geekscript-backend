@@ -8,6 +8,7 @@ interface Category extends Model<InferAttributes<Category>, InferCreationAttribu
   name: string;
   createdAt: CreationOptional<Date>;
   updatedAt: CreationOptional<Date>;
+  deletedAt: CreationOptional<Date>;
 }
 
 const Category = dbConnection.define<Category>(
@@ -27,9 +28,13 @@ const Category = dbConnection.define<Category>(
     updatedAt: {
       type: DataTypes.DATE,
     },
+    deletedAt: {
+      type: DataTypes.DATE,
+    }
   },
   {
     tableName: "category",
+    paranoid: true
   }
 );
 
