@@ -31,6 +31,9 @@ export default {
             updatedAt: {
                 type: DataTypes.DATE,
             },
+            deletedAt: {
+                type: DataTypes.DATE,
+            }
         })
     },
     down: (queryInterface: QueryInterface)=>{

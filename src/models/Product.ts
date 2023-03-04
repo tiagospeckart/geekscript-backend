@@ -13,6 +13,7 @@ interface Product extends Model<InferAttributes<Product>, InferCreationAttribute
   category_id: ForeignKey<number>
   createdAt: CreationOptional<Date>;
   updatedAt: CreationOptional<Date>;
+  deletedAt: CreationOptional<Date>;
 }
 
 const Product = dbConnection.define<Product>(
@@ -48,9 +49,13 @@ const Product = dbConnection.define<Product>(
     updatedAt: {
       type: DataTypes.DATE,
     },
+    deletedAt: {
+      type: DataTypes.DATE,
+    }
   },
   {
     tableName: "product",
+    paranoid: true
   }
 );
 
