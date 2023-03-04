@@ -1,45 +1,41 @@
 import { Request, Response } from "express";
-import { Purchase, User, PurchaseProduct, Product } from '../models';
+import { Purchase, PurchaseProduct } from '../models';
 import jwt from 'jsonwebtoken';
 
-const checkoutController = {
+export default class checkoutController {
   static create = async (req: Request, res: Response): Promise<Response> => {
     try {
 
       // --- CONSTANTES --- //
+      const { purchaseIdList, total } = req.body;
+      const authHeader: any = req.headers.authorization;
+      const getToken = authHeader.split(' ')[1];
+      const verifyToken: any = jwt.verify(getToken, process.env.SECRET as string);
+      const user_id = verifyToken.id_user;
 
-      const { purchaseList, total } = req.body;
+      console.log(user_id) // OK
+      console.log(purchaseIdList) // OK
+      console.log(total) // OK
 
-      // código decodificador pode virar uma função Helper na refatoração
-      const authHeader:any = req.headers.authorization;
-      const getToken = authHeader.split(' ').[1];
-      const decode = jwt.decode(getToken);
-      
-      // BUGADO
-      // para pegar o "id_user do objeto"
-      const user_id = decode.userId
-
-      // ---- FUNÇÕES --- //
-
-      // criar a inserção da compra com o usuário
-
-      const newPurchase = await Purchase.create({
-        user_id: user_id,
-        total: total,
-      })
-
-      const newPurchases = purchaseList.forEach(purchase => {
-        PurchaseProduct.create({
-          purchase_id: newPurchase.id_purchase,
-          product_id: purchaseList.product_id,
-        })
+      const newPurchase: Purchase = await Purchase.create({
+        user_id,
+        total
       });
+      console.log(newPurchase) // Não tá inserindo direito, por que será??
+
+      const checkoutArray = purchaseIdList.map((currElement:number) => PurchaseProduct.create({
+        purchase_id: newPurchase.id_purchase,
+        product_id: currElement,
+      }))
+
       
-      return res.status(201).json(newPurchases);
+      
+      
+      
+      
+      return res.status(201).json(checkoutArray);
     } catch {
       return res.status(400).json('Não foi possível realizar a compra');
     }
   }
 }
-
-export default checkoutController;

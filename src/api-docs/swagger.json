@@ -11,16 +11,12 @@
       "name": "MIT",
       "url": "https://opensource.org/license/mit/"
     },
-    "version": "1.0.6"
+    "version": "1.0.9"
   },
   "servers": [
     {
       "url": "http://localhost:5000",
       "description": "Localhost for Development"
-    },
-    {
-      "url": "http://localhost:6000",
-      "description": "test"
     }
   ],
   "tags": [
@@ -258,7 +254,8 @@
           "500": {
             "description": "Server side error"
           }
-        },"security": [
+        },
+        "security": [
           {
             "bearerAuth": []
           }
@@ -295,7 +292,8 @@
           "500": {
             "description": "Server side error"
           }
-        } ,"security": [
+        },
+        "security": [
           {
             "bearerAuth": []
           }
@@ -540,6 +538,52 @@
           },
           "404": {
             "description": "Requested resource not found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/checkout": {
+      "post": {
+        "tags": [
+          "Purchase"
+        ],
+        "summary": "Checkout page",
+        "operationId": "checkout",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Checkout"
+              },
+              "example": {
+                "total": "458,23",
+                "purchaseIdList": [
+                  1,
+                  2
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Checkout"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request not understood, revise syntax"
           }
         },
         "security": [
@@ -1159,6 +1203,21 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/Purchase"
+        }
+      },
+      "Checkout": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "number",
+            "format": "integer"
+          },
+          "purchaseIdList": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          }
         }
       },
       "Login": {
