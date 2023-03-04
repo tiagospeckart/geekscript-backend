@@ -11,6 +11,7 @@ interface Purchase extends Model<InferAttributes<Purchase>, InferCreationAttribu
   total: number;
   createdAt: CreationOptional<Date>;
   updatedAt: CreationOptional<Date>;
+  deletedAt: CreationOptional<Date>;
 }
 
 const Purchase = dbConnection.define<Purchase>(
@@ -37,9 +38,13 @@ const Purchase = dbConnection.define<Purchase>(
     updatedAt: {
       type: DataTypes.DATE,
     },
+    deletedAt: {
+      type: DataTypes.DATE,
+    }
   },
   {
     tableName: "purchase",
+    paranoid: true
   }
 );
 

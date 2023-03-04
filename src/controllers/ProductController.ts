@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { Category, Product } from "../models";
 
-const productController = {
-  async create(req: Request, res: Response) {
+export default class productController  {
+  static create = async (req: Request, res: Response): Promise<Response> => {
     try {
       const { name, photo, price, description, category_id } = req.body;
       const newProduct: Product = await Product.create({
@@ -16,20 +16,20 @@ const productController = {
     } catch {
       return res.status(400).json("Não foi possível realizar o cadastro");
     }
-  },
+  }
 
-  async findAll(req: Request, res: Response) {
+  static findAll = async (req: Request, res: Response): Promise<Response> => {
     try {
       const findProducts = await Product.findAll({ 
-        include: Category 
+        include: Category,
       });
       return res.status(200).json(findProducts);
     } catch (error) {
       return res.status(500).json("Não foi possível realizar a ação");
     }
-  },
+  }
 
-  async findOne(req: Request, res: Response) {
+  static findOne = async (req: Request, res: Response): Promise<Response> => {
     try {
       const { id } = req.params;
       let findProduct = await Product.findByPk(id);
@@ -43,9 +43,9 @@ const productController = {
     } catch {
       return res.status(500).json("Não foi possível realizar a ação");
     }
-  },
+  }
 
-  async update(req: Request, res: Response) {
+  static update = async (req: Request, res: Response): Promise<Response> => {
     try {
       const id = req.params.id;
 
@@ -76,9 +76,9 @@ const productController = {
     } catch (error) {
       return res.status(500).json("Não foi possível atualizar o cadastro");
     }
-  },
+  }
 
-  async delete(req: Request, res: Response) {
+  static delete = async (req: Request, res: Response): Promise<Response> => {
     try {
       const { id } = req.params;
 
@@ -95,7 +95,5 @@ const productController = {
     } catch (error) {
       return res.status(500).json("Não foi possível realizar a ação");
     }
-  },
+  }
 };
-
-export default productController;

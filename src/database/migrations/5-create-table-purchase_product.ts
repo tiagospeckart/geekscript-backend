@@ -34,6 +34,9 @@ export default {
             updatedAt: {
                 type: DataTypes.DATE,
             },
+            deletedAt: {
+                type: DataTypes.DATE,
+            }
         }, {
             logging: console.log
     })

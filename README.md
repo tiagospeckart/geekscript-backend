@@ -1,6 +1,6 @@
 # geekstore-backend
 
-Final project of [Gama Academy](https://www.gama.academy/) Webdevelopment course. It's a MVP of a backend server that manages a REST API for an ecommerce. The second half of the project is: **todo**
+Final project of [Gama Academy](https://www.gama.academy/) Webdevelopment course. It's a MVP of a backend server that manages a REST API for an ecommerce.
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/tiagospeckart/geekstore-backend?style=for-the-badge)
 ![GitHub language count](https://img.shields.io/github/languages/count/tiagospeckart/geekstore-backend?style=for-the-badge)
@@ -21,20 +21,24 @@ Final project of [Gama Academy](https://www.gama.academy/) Webdevelopment course
 
 ## Installation
 
-1. Dowload packages `npm i`
-2. Build `npm run build`
-3. Test server `npm run dev`
+1. Create your own `.env` file according to `example.env`
+2. Dowload packages `npm i`
+3. Build `npm run build`
+4. Test server `npm run dev`
 
 ### Create Database
 
-1. Create your own `.env` file according to your preferred settings
-2. After Build: run `npx sequelize db:create`
-3. Run `npx sequelize db:migrate` to create generate tables
-4. Run `npx sequelize db:seed:all` to populate database with test data
-5. Starter admin account: email **admin@admin.com**, pass **admin123**
+- Run `npm run dbbuild`
 
+Starter admin account: email **admin@admin.com**, pass **admin123**
+#### Recreating the database
+
+1. Delete `dist` folder
+2. `npm run build`
+3. `npm run dbrebuild`
 ## API Documentation
 
+[SwaggerHub](https://app.swaggerhub.com/apis-docs/tiagospeckart/geek_script/1.0.8)
 ### Running locally
 
 1. Run server with `npm run dev`

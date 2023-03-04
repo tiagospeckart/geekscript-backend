@@ -12,6 +12,7 @@ interface PurchaseProduct
   product_id: ForeignKey<number>;
   createdAt: CreationOptional<Date>;
   updatedAt: CreationOptional<Date>;
+  deletedAt: CreationOptional<Date>;
 }
 
 const PurchaseProduct= dbConnection.define<PurchaseProduct>(
@@ -42,9 +43,13 @@ const PurchaseProduct= dbConnection.define<PurchaseProduct>(
     updatedAt: {
       type: DataTypes.DATE,
     },
+    deletedAt: {
+      type: DataTypes.DATE,
+    }
   },
   {
     tableName: 'purchase_product',
+    paranoid: true
   }
 );
 
