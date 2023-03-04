@@ -72,7 +72,6 @@ export default class userController {
     try {
       const { id } = req.params;
       const { name, email, password, scope } = req.body;
-
       const checkUser = await User.findByPk(id);
       if (!checkUser) {
         return res.status(404).json('Id não encontrado');
