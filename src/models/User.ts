@@ -11,6 +11,7 @@ interface User extends Model<InferAttributes<User>, InferCreationAttributes<User
   scope?: string;
   createdAt: CreationOptional<Date>;
   updatedAt: CreationOptional<Date>;
+  deletedAt: CreationOptional<Date>;
 }
 
 const User = dbConnection.define<User>(
@@ -40,9 +41,13 @@ const User = dbConnection.define<User>(
     updatedAt: {
       type: DataTypes.DATE,
     }, 
+    deletedAt: {
+      type: DataTypes.DATE,
+    }
   },
   {
     tableName: "user",
+    paranoid: true
   }
 );
 
