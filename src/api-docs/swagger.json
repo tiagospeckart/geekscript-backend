@@ -561,7 +561,7 @@
                 "$ref": "#/components/schemas/Checkout"
               },
               "example": {
-                "total": "458,23",
+                "total": "458.23",
                 "purchaseIdList": [
                   1,
                   2
