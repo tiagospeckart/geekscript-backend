@@ -1,4 +1,4 @@
-const MESSAGE =  {
+const MESSAGE = {
   ERROR: {
     INVALID_DATA: 'Invalid e-mail or password, please try again',
     EMAIL: 'E-mail already registered',
@@ -14,7 +14,7 @@ const MESSAGE =  {
     DELETE: 'Unable to delete data',
     CHECKOUT_REG: 'Failed to create new purchase',
     CHECKOUT: 'Unable to complete the purchase',
-    TOKEN: 'Unable to generate a token'
+    TOKEN: 'Unable to generate a token',
   },
 };
 
