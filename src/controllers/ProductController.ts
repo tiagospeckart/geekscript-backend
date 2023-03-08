@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
-import { Category, Product } from "../models";
+import { Request, Response } from 'express';
+import { Category, Product } from '../models';
 
-export default class productController  {
+export default class productController {
   static create = async (req: Request, res: Response): Promise<Response> => {
     try {
       const { name, photo, price, description, category_id } = req.body;
@@ -14,20 +14,36 @@ export default class productController  {
       });
       return res.status(201).json(newProduct);
     } catch {
-      return res.status(400).json("Não foi possível realizar o cadastro");
+      return res.status(400).json('Não foi possível realizar o cadastro');
     }
-  }
+  };
 
   static findAll = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const findProducts = await Product.findAll({ 
-        include: Category,
+      const queryString = req.query.category;
+
+      if (queryString) {
+        const findProducts = await Product.findAll({
+          include: {
+            model: Category,
+            where: {
+              name: queryString,
+            },
+          },
+        });
+        return res.status(200).json(findProducts);
+      }
+
+      const findProducts = await Product.findAll({
+        include: {
+          model: Category,
+        },
       });
       return res.status(200).json(findProducts);
     } catch (error) {
-      return res.status(500).json("Não foi possível realizar a ação");
+      return res.status(500).json('Não foi possível realizar a ação');
     }
-  }
+  };
 
   static findOne = async (req: Request, res: Response): Promise<Response> => {
     try {
@@ -35,15 +51,17 @@ export default class productController  {
       let findProduct = await Product.findByPk(id);
 
       if (!findProduct) {
-        return res.status(404).json("Id não encontrado");
+        return res.status(404).json('Id não encontrado');
       }
 
-      findProduct = await Product.findByPk(id, { include: Category });
+      findProduct = await Product.findByPk(id, {
+        include: { model: Category },
+      });
       return res.status(200).json(findProduct);
     } catch {
-      return res.status(500).json("Não foi possível realizar a ação");
+      return res.status(500).json('Não foi possível realizar a ação');
     }
-  }
+  };
 
   static update = async (req: Request, res: Response): Promise<Response> => {
     try {
@@ -53,16 +71,16 @@ export default class productController  {
 
       const checkProduct = await Product.findByPk(id);
       if (!checkProduct) {
-        return res.status(404).json("Id não encontrado");
+        return res.status(404).json('Id não encontrado');
       }
 
       await Product.update(
         {
-        name,
-        photo,
-        price,
-        description,
-        category_id,
+          name,
+          photo,
+          price,
+          description,
+          category_id,
         },
         {
           where: {
@@ -74,9 +92,9 @@ export default class productController  {
       const showProduct = await Product.findByPk(id);
       return res.status(200).json(showProduct);
     } catch (error) {
-      return res.status(500).json("Não foi possível atualizar o cadastro");
+      return res.status(500).json('Não foi possível atualizar o cadastro');
     }
-  }
+  };
 
   static delete = async (req: Request, res: Response): Promise<Response> => {
     try {
@@ -84,7 +102,7 @@ export default class productController  {
 
       let deleteProduct = await Product.findByPk(id);
       if (!deleteProduct) {
-        return res.status(404).json("Id não encontrado");
+        return res.status(404).json('Id não encontrado');
       }
       await Product.destroy({
         where: {
@@ -93,7 +111,7 @@ export default class productController  {
       });
       return res.status(204).json();
     } catch (error) {
-      return res.status(500).json("Não foi possível realizar a ação");
+      return res.status(500).json('Não foi possível realizar a ação');
     }
-  }
-};
+  };
+}
