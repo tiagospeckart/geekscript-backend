@@ -4,10 +4,10 @@ import { Discount } from '../models';
 export default class discountController {
   static create = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const { coupon_name, discount_value } = req.body;
+      const { name, value } = req.body;
       const newDiscount: Discount = await Discount.create({
-        coupon_name,
-        discount_value,
+        name,
+        value,
       });
       return res.status(201).json(newDiscount);
     } catch {
@@ -44,7 +44,7 @@ export default class discountController {
     try {
       const id = req.params.id;
 
-      const { coupon_name, discount_value } = req.body;
+      const { name, value } = req.body;
 
       const checkDiscount = await Discount.findByPk(id);
       if (!checkDiscount) {
@@ -53,8 +53,8 @@ export default class discountController {
 
       await Discount.update(
         {
-          coupon_name,
-          discount_value,
+          name,
+          value,
         },
         {
           where: {
