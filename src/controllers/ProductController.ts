@@ -20,14 +20,16 @@ export default class productController {
 
   static findAll = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const queryString = req.query.category;
 
-      if (queryString) {
+      //filter by category
+      const categoryUrl = req.query.category;
+
+      if (categoryUrl) {
         const findProducts = await Product.findAll({
           include: {
             model: Category,
             where: {
-              name: queryString,
+              name: categoryUrl,
             },
           },
         });
