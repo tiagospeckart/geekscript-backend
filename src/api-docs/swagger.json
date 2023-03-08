@@ -64,8 +64,8 @@
                 "$ref": "#/components/schemas/Login"
               },
               "example": {
-                "email": "test@email.com",
-                "password": "testpass123"
+                "email": "admin@admin.com",
+                "password": "admin123"
               }
             }
           },
@@ -78,7 +78,7 @@
               "application/json": {
                 "schema": {
                   "type": "string",
-                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoxLCJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGFkbWluLmNvbSIsInNjb3BlIjoiYWRtaW4iLCJpYXQiOjE2Nzc3OTk4OTUsImV4cCI6MTY4MDM5MTg5NX0.QRbfJMwiEtvW7FU8cJBaw28n79B6OV50B4wgDXw2cKg"
+                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoxLCJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGFkbWluLmNvbSIsInNjb3BlIjoiYWRtaW4iLCJpYXQiOjE2NzgxNDM1OTksImV4cCI6MTY4MDczNTU5OX0.W4bI0RxLCQAGWzo0uQNwc9B0G5p6nWGbTwwAdTGnAqA"
                 }
               }
             }
@@ -561,11 +561,12 @@
                 "$ref": "#/components/schemas/Checkout"
               },
               "example": {
-                "total": "458.23",
+                "purchaseTotal": "458.23",
                 "purchaseIdList": [
                   1,
                   2
-                ]
+                ],
+                "discountName": "Cupom 15"
               }
             }
           },

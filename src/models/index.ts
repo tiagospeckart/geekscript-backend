@@ -3,6 +3,7 @@ import Product from './Product';
 import PurchaseProduct from './PurchaseProduct';
 import Purchase from './Purchase';
 import Category from './Category';
+import Discount from './Discount'
 
 Category.hasMany(Product, { foreignKey: 'category_id' });
 Product.belongsTo(Category, { foreignKey: 'category_id' });
@@ -16,4 +17,7 @@ PurchaseProduct.belongsTo(Purchase, { foreignKey: 'purchase_id' });
 User.hasMany(Purchase, { foreignKey: 'user_id' });
 Purchase.belongsTo(User, { foreignKey: 'user_id' });
 
-export { Category, Product, PurchaseProduct, Purchase, User };
+Discount.hasMany(Product, { foreignKey: 'discount_id' });
+Product.belongsTo(Discount, { foreignKey: 'discount_id' });
+
+export { Category, Product, PurchaseProduct, Purchase, User, Discount };
