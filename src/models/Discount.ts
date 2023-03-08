@@ -21,7 +21,7 @@ const Discount = dbConnection.define<Discount>(
       autoIncrement: true,
     },
     value:{
-      type: DataTypes.NUMBER,
+      type: DataTypes.DECIMAL(3,2),
     },
     name: {
       type: DataTypes.STRING,
