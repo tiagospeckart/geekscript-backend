@@ -12,7 +12,7 @@ export default class discountController {
       });
       return res.status(201).json(newDiscount);
     } catch {
-      return res.status(400).json(MESSAGE.ERROR.DISCOUNT_REG);
+      return res.status(400).json(MESSAGE.ERROR.REGISTER.DISCOUNT);
     }
   };
 
@@ -31,7 +31,7 @@ export default class discountController {
       let findDiscount = await Discount.findByPk(id);
 
       if (!findDiscount) {
-        return res.status(404).json(MESSAGE.ERROR.ID);
+        return res.status(404).json(MESSAGE.ERROR.ID_NOT_FOUND);
       }
 
       findDiscount = await Discount.findByPk(id);
@@ -49,7 +49,7 @@ export default class discountController {
 
       const checkDiscount = await Discount.findByPk(id);
       if (!checkDiscount) {
-        return res.status(404).json(MESSAGE.ERROR.ID);
+        return res.status(404).json(MESSAGE.ERROR.ID_NOT_FOUND);
       }
 
       await Discount.update(
@@ -77,7 +77,7 @@ export default class discountController {
 
       let deleteDiscount = await Discount.findByPk(id);
       if (!deleteDiscount) {
-        return res.status(404).json(MESSAGE.ERROR.ID);
+        return res.status(404).json(MESSAGE.ERROR.ID_NOT_FOUND);
       }
       await Discount.destroy({
         where: {

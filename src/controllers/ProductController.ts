@@ -15,7 +15,7 @@ export default class productController {
       });
       return res.status(201).json(newProduct);
     } catch {
-      return res.status(400).json(MESSAGE.ERROR.PRODUCT_REG);
+      return res.status(400).json(MESSAGE.ERROR.REGISTER.PRODUCT);
     }
   };
 
@@ -54,7 +54,7 @@ export default class productController {
       let findProduct = await Product.findByPk(id);
 
       if (!findProduct) {
-        return res.status(404).json(MESSAGE.ERROR.ID);
+        return res.status(404).json(MESSAGE.ERROR.ID_NOT_FOUND);
       }
 
       findProduct = await Product.findByPk(id, {
@@ -74,7 +74,7 @@ export default class productController {
 
       const checkProduct = await Product.findByPk(id);
       if (!checkProduct) {
-        return res.status(404).json(MESSAGE.ERROR.ID);
+        return res.status(404).json(MESSAGE.ERROR.ID_NOT_FOUND);
       }
 
       await Product.update(
@@ -105,7 +105,7 @@ export default class productController {
 
       let deleteProduct = await Product.findByPk(id);
       if (!deleteProduct) {
-        return res.status(404).json(MESSAGE.ERROR.ID);
+        return res.status(404).json(MESSAGE.ERROR.ID_NOT_FOUND);
       }
       await Product.destroy({
         where: {

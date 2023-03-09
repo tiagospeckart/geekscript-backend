@@ -24,12 +24,13 @@ export default class checkoutController {
         purchaseTotal -= discountValue;
       };
 
+      // Refatorar função abaixo em outro método?
+      // Incorporar o erro no Swagger
       const newPurchase: Purchase = await Purchase.create({
         user_id,
         total: purchaseTotal,
         discount_id: discount?.id_discount
       }).catch((error) => {
-        console.error(error);
         throw new Error(MESSAGE.ERROR.CHECKOUT_REG);
       });
 
