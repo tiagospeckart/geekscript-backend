@@ -17,7 +17,7 @@ PurchaseProduct.belongsTo(Purchase, { foreignKey: 'purchase_id' });
 User.hasMany(Purchase, { foreignKey: 'user_id' });
 Purchase.belongsTo(User, { foreignKey: 'user_id' });
 
-Discount.hasMany(Product, { foreignKey: 'discount_id' });
-Product.belongsTo(Discount, { foreignKey: 'discount_id' });
+Discount.hasMany(Purchase, { foreignKey: 'discount_id' });
+Purchase.belongsTo(Discount, { foreignKey: 'discount_id' });
 
 export { Category, Product, PurchaseProduct, Purchase, User, Discount };
