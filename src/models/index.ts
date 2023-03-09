@@ -3,7 +3,7 @@ import Product from './Product';
 import PurchaseProduct from './PurchaseProduct';
 import Purchase from './Purchase';
 import Category from './Category';
-import Discount from './Discount'
+import Discount from './Discount';
 
 Category.hasMany(Product, { foreignKey: 'category_id' });
 Product.belongsTo(Category, { foreignKey: 'category_id' });
