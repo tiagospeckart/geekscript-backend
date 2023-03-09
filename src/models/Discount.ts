@@ -43,5 +43,3 @@ const Discount = dbConnection.define<Discount>(
 );
 
 export default Discount;
-
-export default Discount;
