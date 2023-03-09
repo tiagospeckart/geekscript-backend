@@ -10,7 +10,7 @@ export default class categoryController {
       //check if category already exists
       const checkCategory: number = await Category.count({ where: { name } });
       if (checkCategory) {
-        return res.status(409).json(MESSAGE.ERROR.CATEGORY);
+        return res.status(409).json(MESSAGE.ERROR.EXIST.CATEGORY);
       }
 
       const newCategory: Category = await Category.create({
@@ -18,7 +18,7 @@ export default class categoryController {
       });
       return res.status(201).json(newCategory);
     } catch {
-      return res.status(400).json(MESSAGE.ERROR.CATEGORY_REG);
+      return res.status(400).json(MESSAGE.ERROR.REGISTER.CATEGORY);
     }
   };
 
@@ -37,7 +37,7 @@ export default class categoryController {
       let findCategory = await Category.findByPk(id);
 
       if (!findCategory) {
-        return res.status(404).json(MESSAGE.ERROR.ID);
+        return res.status(404).json(MESSAGE.ERROR.ID_NOT_FOUND);
       }
 
       findCategory = await Category.findByPk(id, {
@@ -58,7 +58,7 @@ export default class categoryController {
 
       const checkCategory = await Category.findByPk(id);
       if (!checkCategory) {
-        return res.status(404).json(MESSAGE.ERROR.ID);
+        return res.status(404).json(MESSAGE.ERROR.ID_NOT_FOUND);
       }
 
       await Category.update(
@@ -85,7 +85,7 @@ export default class categoryController {
 
       let deleteCategory = await Category.findByPk(id);
       if (!deleteCategory) {
-        return res.status(404).json(MESSAGE.ERROR.ID);
+        return res.status(404).json(MESSAGE.ERROR.ID_NOT_FOUND);
       }
       await Category.destroy({
         where: {

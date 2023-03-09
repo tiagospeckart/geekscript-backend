@@ -11,7 +11,7 @@ export default class userController {
 
       const checkEmail = await User.count({ where: { email } });
       if (checkEmail) {
-        return res.status(409).json(MESSAGE.ERROR.EMAIL);
+        return res.status(409).json(MESSAGE.ERROR.EXIST.EMAIL);
       }
 
       const newUser = await User.create({
@@ -22,7 +22,7 @@ export default class userController {
       });
       return res.status(201).json(newUser);
     } catch {
-      return res.status(400).json(MESSAGE.ERROR.USER_REG);
+      return res.status(400).json(MESSAGE.ERROR.REGISTER.USER);
     }
   };
 
@@ -56,7 +56,7 @@ export default class userController {
       let findUser = await User.findByPk(id);
 
       if (!findUser) {
-        return res.status(404).json(MESSAGE.ERROR.ID);
+        return res.status(404).json(MESSAGE.ERROR.ID_NOT_FOUND);
       }
 
       findUser = await User.findByPk(id, {
@@ -75,7 +75,7 @@ export default class userController {
       const { name, email, password, scope } = req.body;
       const checkUser = await User.findByPk(id);
       if (!checkUser) {
-        return res.status(404).json(MESSAGE.ERROR.ID);
+        return res.status(404).json(MESSAGE.ERROR.ID_NOT_FOUND);
       }
 
       const criptoPassword = password ? bcrypt.hashSync(password, 10): checkUser.password;
@@ -107,7 +107,7 @@ export default class userController {
 
       let deleteUser = await User.findByPk(id);
       if (!deleteUser) {
-        return res.status(404).json(MESSAGE.ERROR.ID);
+        return res.status(404).json(MESSAGE.ERROR.ID_NOT_FOUND);
       }
       await User.destroy({
         where: {

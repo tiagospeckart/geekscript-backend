@@ -1,16 +1,9 @@
-import {
-  DataTypes,
-  CreationOptional,
-  InferAttributes,
-  InferCreationAttributes,
-  Model,
-} from 'sequelize';
+import { DataTypes, CreationOptional, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
 import { mySqlConection } from '../database';
 
 const dbConnection = mySqlConection.getInstance();
 
-interface Discount
-  extends Model<InferAttributes<Discount>, InferCreationAttributes<Discount>> {
+interface Discount extends Model<InferAttributes<Discount>, InferCreationAttributes<Discount>> {
   id_discount: CreationOptional<number>;
   name: string;
   value: number;
@@ -20,15 +13,15 @@ interface Discount
 }
 
 const Discount = dbConnection.define<Discount>(
-  'Discount',
+'Discount',
   {
     id_discount: {
       type: DataTypes.INTEGER.UNSIGNED,
       primaryKey: true,
       autoIncrement: true,
     },
-    value: {
-      type: DataTypes.DECIMAL(3, 2),
+    value:{
+      type: DataTypes.DECIMAL(3,2),
     },
     name: {
       type: DataTypes.STRING,
@@ -41,6 +34,7 @@ const Discount = dbConnection.define<Discount>(
     },
     deletedAt: {
       type: DataTypes.DATE,
+
     },
   },
   {
@@ -50,3 +44,4 @@ const Discount = dbConnection.define<Discount>(
 );
 
 export default Discount;
+ 

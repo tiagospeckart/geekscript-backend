@@ -12,14 +12,18 @@ export default class purchaseController {
       });
       return res.status(201).json(newOrder);
     } catch {
-      return res.status(400).json(MESSAGE.ERROR.PURCHASE_REG);
+      return res.status(400).json(MESSAGE.ERROR.REGISTER.PURCHASE);
     }
   };
 
   static findAll = async (req: Request, res: Response): Promise<Response> => {
     try {
       const findPurchase = await Purchase.findAll({
-        include: {model: User, attributes: { exclude: ['password','email', 'scope', 'createdAt', 'updatedAt']}},
+        include: {
+          model: User, 
+          attributes: { 
+            exclude: ['password','email', 'scope', 'createdAt', 'updatedAt']
+          }},
       });
 
       return res.status(200).json(findPurchase);
@@ -34,11 +38,14 @@ export default class purchaseController {
       let findPurchase = await Purchase.findByPk(id);
 
       if (!findPurchase) {
-        return res.status(404).json(MESSAGE.ERROR.ID);
+        return res.status(404).json(MESSAGE.ERROR.ID_NOT_FOUND);
       }
 
       findPurchase = await Purchase.findByPk(id, {
         include: User,
+        attributes: {
+          exclude: ['password','email', 'scope', 'createdAt', 'updatedAt']
+        }
       });
       return res.status(200).json(findPurchase);
     } catch {
@@ -54,7 +61,7 @@ export default class purchaseController {
 
       const checkPurchase = await Purchase.findByPk(id);
       if (!checkPurchase) {
-        return res.status(404).json(MESSAGE.ERROR.ID);
+        return res.status(404).json(MESSAGE.ERROR.ID_NOT_FOUND);
       }
 
       await Purchase.update(
@@ -82,7 +89,7 @@ export default class purchaseController {
 
       let deletePurchase = await Purchase.findByPk(id);
       if (!deletePurchase) {
-        return res.status(404).json(MESSAGE.ERROR.ID);
+        return res.status(404).json(MESSAGE.ERROR.ID_NOT_FOUND);
       }
       await Purchase.destroy({
         where: {
