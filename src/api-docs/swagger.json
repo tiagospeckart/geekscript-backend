@@ -404,7 +404,7 @@
         ]
       }
     },
-    "/product/catalog": {
+    "/product/catalog/": {
       "get": {
         "tags": [
           "Product"
@@ -414,7 +414,8 @@
         "parameters": [
           {
             "name": "category",
-            "in": "query",
+            "in": "
+            ",
             "description": "Valid category name as query parameter to select a few products",
             "required": false,
             "style": "form",
