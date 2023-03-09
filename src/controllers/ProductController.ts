@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { Category, Product } from '../models';
+import MESSAGE from '../constants/messages';
 
 export default class productController {
   static create = async (req: Request, res: Response): Promise<Response> => {
@@ -14,7 +15,7 @@ export default class productController {
       });
       return res.status(201).json(newProduct);
     } catch {
-      return res.status(400).json('Não foi possível realizar o cadastro');
+      return res.status(400).json(MESSAGE.ERROR.PRODUCT_REG);
     }
   };
 
@@ -43,7 +44,7 @@ export default class productController {
       });
       return res.status(200).json(findProducts);
     } catch (error) {
-      return res.status(500).json('Não foi possível realizar a ação');
+      return res.status(500).json(MESSAGE.ERROR.SEARCH_DB);
     }
   };
 
@@ -53,7 +54,7 @@ export default class productController {
       let findProduct = await Product.findByPk(id);
 
       if (!findProduct) {
-        return res.status(404).json('Id não encontrado');
+        return res.status(404).json(MESSAGE.ERROR.ID);
       }
 
       findProduct = await Product.findByPk(id, {
@@ -61,7 +62,7 @@ export default class productController {
       });
       return res.status(200).json(findProduct);
     } catch {
-      return res.status(500).json('Não foi possível realizar a ação');
+      return res.status(500).json(MESSAGE.ERROR.SEARCH_DB);
     }
   };
 
@@ -73,7 +74,7 @@ export default class productController {
 
       const checkProduct = await Product.findByPk(id);
       if (!checkProduct) {
-        return res.status(404).json('Id não encontrado');
+        return res.status(404).json(MESSAGE.ERROR.ID);
       }
 
       await Product.update(
@@ -94,7 +95,7 @@ export default class productController {
       const showProduct = await Product.findByPk(id);
       return res.status(200).json(showProduct);
     } catch (error) {
-      return res.status(500).json('Não foi possível atualizar o cadastro');
+      return res.status(500).json(MESSAGE.ERROR.UPDATE_REGISTER);
     }
   };
 
@@ -104,7 +105,7 @@ export default class productController {
 
       let deleteProduct = await Product.findByPk(id);
       if (!deleteProduct) {
-        return res.status(404).json('Id não encontrado');
+        return res.status(404).json(MESSAGE.ERROR.ID);
       }
       await Product.destroy({
         where: {
@@ -113,7 +114,7 @@ export default class productController {
       });
       return res.status(204).json();
     } catch (error) {
-      return res.status(500).json('Não foi possível realizar a ação');
+      return res.status(401).json(MESSAGE.ERROR.DELETE);
     }
   };
 }

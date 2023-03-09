@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Discount, Purchase, PurchaseProduct } from '../models';
 import jwt from 'jsonwebtoken';
+import MESSAGE from "../constants/messages";
 
 export default class checkoutController {
   static create = async (req: Request, res: Response): Promise<Response> => {
@@ -29,7 +30,7 @@ export default class checkoutController {
         discount_id: discount?.id_discount
       }).catch((error) => {
         console.error(error);
-        throw new Error('Failed to create new purchase');
+        throw new Error(MESSAGE.ERROR.CHECKOUT_REG);
       });
 
       purchaseIdList.map((currElement:number) => PurchaseProduct.create({
@@ -45,7 +46,7 @@ export default class checkoutController {
 
       return res.status(201).json(finishedPurchase);
     } catch {
-      return res.status(400).json('Não foi possível realizar a compra');
+      return res.status(400).json(MESSAGE.ERROR.CHECKOUT);
     }
   }
 }
