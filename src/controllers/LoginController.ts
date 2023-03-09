@@ -3,6 +3,7 @@ import User from '../models/User';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import key from '../configs/jwtKey';
+import MESSAGE from '../constants/messages';
 
 export default class loginController {
   static login = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
@@ -13,13 +14,13 @@ export default class loginController {
     if (!dataUser) {
       return res
         .status(401)
-        .json('Invalid e-mail or password, please try again');
+        .json(MESSAGE.ERROR.INVALID_DATA);
     }
 
     if (!bcrypt.compareSync(password, dataUser.password)) {
       return res
         .status(401)
-        .json('Invalid e-mail or password, please try again');
+        .json(MESSAGE.ERROR.INVALID_DATA);
     }
 
     try {
@@ -31,14 +32,12 @@ export default class loginController {
           scope: dataUser.scope,
         },
         key.privateKey,
-        { expiresIn: '30 days' }
+        { expiresIn: '1 day' }
       );
 
-      // Criar uma função para selecionar o id e retornar na resposta
-      
       return res.status(200).json({ id: dataUser.id_user, token: token });
     } catch (error) {
-      return res.status(500).json('Não foi possível realizar a ação');
+      return res.status(500).json(MESSAGE.ERROR.TOKEN);
     }
   };
 }

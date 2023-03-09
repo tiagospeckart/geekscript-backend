@@ -1,7 +1,8 @@
-import { Request, Response } from "express";
-import { Category, Product } from "../models";
+import { Request, Response } from 'express';
+import { Category, Product } from '../models';
+import MESSAGE from '../constants/messages';
 
-export default class productController  {
+export default class productController {
   static create = async (req: Request, res: Response): Promise<Response> => {
     try {
       const { name, photo, price, description, category_id } = req.body;
@@ -14,20 +15,38 @@ export default class productController  {
       });
       return res.status(201).json(newProduct);
     } catch {
-      return res.status(400).json("Não foi possível realizar o cadastro");
+      return res.status(400).json(MESSAGE.ERROR.REGISTER.PRODUCT);
     }
-  }
+  };
 
   static findAll = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const findProducts = await Product.findAll({ 
-        include: Category,
+
+      //filter by category
+      const categoryUrl = req.query.category;
+
+      if (categoryUrl) {
+        const findProducts = await Product.findAll({
+          include: {
+            model: Category,
+            where: {
+              name: categoryUrl,
+            },
+          },
+        });
+        return res.status(200).json(findProducts);
+      }
+
+      const findProducts = await Product.findAll({
+        include: {
+          model: Category,
+        },
       });
       return res.status(200).json(findProducts);
     } catch (error) {
-      return res.status(500).json("Não foi possível realizar a ação");
+      return res.status(500).json(MESSAGE.ERROR.SEARCH_DB);
     }
-  }
+  };
 
   static findOne = async (req: Request, res: Response): Promise<Response> => {
     try {
@@ -35,15 +54,17 @@ export default class productController  {
       let findProduct = await Product.findByPk(id);
 
       if (!findProduct) {
-        return res.status(404).json("Id não encontrado");
+        return res.status(404).json(MESSAGE.ERROR.ID_NOT_FOUND);
       }
 
-      findProduct = await Product.findByPk(id, { include: Category });
+      findProduct = await Product.findByPk(id, {
+        include: { model: Category },
+      });
       return res.status(200).json(findProduct);
     } catch {
-      return res.status(500).json("Não foi possível realizar a ação");
+      return res.status(500).json(MESSAGE.ERROR.SEARCH_DB);
     }
-  }
+  };
 
   static update = async (req: Request, res: Response): Promise<Response> => {
     try {
@@ -53,16 +74,16 @@ export default class productController  {
 
       const checkProduct = await Product.findByPk(id);
       if (!checkProduct) {
-        return res.status(404).json("Id não encontrado");
+        return res.status(404).json(MESSAGE.ERROR.ID_NOT_FOUND);
       }
 
       await Product.update(
         {
-        name,
-        photo,
-        price,
-        description,
-        category_id,
+          name,
+          photo,
+          price,
+          description,
+          category_id,
         },
         {
           where: {
@@ -74,9 +95,9 @@ export default class productController  {
       const showProduct = await Product.findByPk(id);
       return res.status(200).json(showProduct);
     } catch (error) {
-      return res.status(500).json("Não foi possível atualizar o cadastro");
+      return res.status(500).json(MESSAGE.ERROR.UPDATE_REGISTER);
     }
-  }
+  };
 
   static delete = async (req: Request, res: Response): Promise<Response> => {
     try {
@@ -84,7 +105,7 @@ export default class productController  {
 
       let deleteProduct = await Product.findByPk(id);
       if (!deleteProduct) {
-        return res.status(404).json("Id não encontrado");
+        return res.status(404).json(MESSAGE.ERROR.ID_NOT_FOUND);
       }
       await Product.destroy({
         where: {
@@ -93,7 +114,7 @@ export default class productController  {
       });
       return res.status(204).json();
     } catch (error) {
-      return res.status(500).json("Não foi possível realizar a ação");
+      return res.status(401).json(MESSAGE.ERROR.DELETE);
     }
-  }
-};
+  };
+}

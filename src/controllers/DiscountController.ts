@@ -1,31 +1,25 @@
 import { Request, Response } from 'express';
-import { Category } from '../models';
+import { Discount } from '../models';
 import MESSAGE from '../constants/messages';
 
-export default class categoryController {
+export default class discountController {
   static create = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const { name } = req.body;
-
-      //check if category already exists
-      const checkCategory: number = await Category.count({ where: { name } });
-      if (checkCategory) {
-        return res.status(409).json(MESSAGE.ERROR.EXIST.CATEGORY);
-      }
-
-      const newCategory: Category = await Category.create({
+      const { name, value } = req.body;
+      const newDiscount: Discount = await Discount.create({
         name,
+        value,
       });
-      return res.status(201).json(newCategory);
+      return res.status(201).json(newDiscount);
     } catch {
-      return res.status(400).json(MESSAGE.ERROR.REGISTER.CATEGORY);
+      return res.status(400).json(MESSAGE.ERROR.REGISTER.DISCOUNT);
     }
   };
 
   static findAll = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const findCategories: Category[] = await Category.findAll();
-      return res.status(200).json(findCategories);
+      const findDiscounts = await Discount.findAll();
+      return res.status(200).json(findDiscounts);
     } catch (error) {
       return res.status(500).json(MESSAGE.ERROR.SEARCH_DB);
     }
@@ -34,18 +28,14 @@ export default class categoryController {
   static findOne = async (req: Request, res: Response): Promise<Response> => {
     try {
       const { id } = req.params;
-      let findCategory = await Category.findByPk(id);
+      let findDiscount = await Discount.findByPk(id);
 
-      if (!findCategory) {
+      if (!findDiscount) {
         return res.status(404).json(MESSAGE.ERROR.ID_NOT_FOUND);
       }
 
-      findCategory = await Category.findByPk(id, {
-        attributes: {
-          exclude: ['password'],
-        },
-      });
-      return res.status(200).json(findCategory);
+      findDiscount = await Discount.findByPk(id);
+      return res.status(200).json(findDiscount);
     } catch {
       return res.status(500).json(MESSAGE.ERROR.SEARCH_DB);
     }
@@ -53,27 +43,29 @@ export default class categoryController {
 
   static update = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const { id } = req.params;
-      const { name } = req.body;
+      const id = req.params.id;
 
-      const checkCategory = await Category.findByPk(id);
-      if (!checkCategory) {
+      const { name, value } = req.body;
+
+      const checkDiscount = await Discount.findByPk(id);
+      if (!checkDiscount) {
         return res.status(404).json(MESSAGE.ERROR.ID_NOT_FOUND);
       }
 
-      await Category.update(
+      await Discount.update(
         {
           name,
+          value,
         },
         {
           where: {
-            id_category: id,
+            id_discount: id,
           },
         }
       );
 
-      const showCategory = await Category.findByPk(id);
-      return res.status(200).json(showCategory);
+      const showDiscount = await Discount.findByPk(id);
+      return res.status(200).json(showDiscount);
     } catch (error) {
       return res.status(500).json(MESSAGE.ERROR.UPDATE_REGISTER);
     }
@@ -83,13 +75,13 @@ export default class categoryController {
     try {
       const { id } = req.params;
 
-      let deleteCategory = await Category.findByPk(id);
-      if (!deleteCategory) {
+      let deleteDiscount = await Discount.findByPk(id);
+      if (!deleteDiscount) {
         return res.status(404).json(MESSAGE.ERROR.ID_NOT_FOUND);
       }
-      await Category.destroy({
+      await Discount.destroy({
         where: {
-          id_category: id,
+          id_discount: id,
         },
       });
       return res.status(204).json();
