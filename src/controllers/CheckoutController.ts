@@ -7,18 +7,29 @@ async function getDiscount(discountName: string): Promise<number | undefined> {
   if (!discountName) {
     return undefined;
   }
-
   const discount = await Discount.findOne({ where: { name: discountName } });
 
   if (!discount) {
     throw new Error('Invalid discount name');
   }
-
   return discount.id_discount;
 }
 
-async function createNewPurchase(userId: number, purchaseTotal: number, discountId?: number): Promise<Purchase> {
-  return Purchase.create({ user_id: userId, total: purchaseTotal, discount_id: discountId });
+async function getNewPurchaseTotal(purchaseTotal: number, discountId?: number): Promise<number> {
+    if (!discountId) {
+    return purchaseTotal;
+  }
+  const discount = await Discount.findByPk(discountId);
+  if (!discount) {
+    throw new Error('Invalid discount name');
+  }
+  const newPurchaseTotal = purchaseTotal - discount.value;
+  return newPurchaseTotal;
+}
+
+async function createNewPurchase(userId: number, purchaseTotal: Promise<number>, discountId?: number): Promise<Purchase> {
+  const resolvedPurchaseTotal = await purchaseTotal;
+  return Purchase.create({ user_id: userId, total: resolvedPurchaseTotal, discount_id: discountId });
 }
 
 async function addPurchaseProducts(purchaseId: number, purchaseIdList: number[]): Promise<PurchaseProduct[]> {
@@ -28,7 +39,6 @@ async function addPurchaseProducts(purchaseId: number, purchaseIdList: number[])
       product_id: productId,
     });
   };
-
   const promises = purchaseIdList.map(createPurchaseProduct);
 
   return Promise.all(promises);
@@ -43,7 +53,9 @@ export default class CheckoutController {
       const { id_user } = jwt.verify(token, process.env.SECRET as string) as { id_user: number };
 
       const discountId = await getDiscount(discountName);
-      const newPurchase = await createNewPurchase(id_user, purchaseTotal, discountId);
+      const newPurchaseTotal = getNewPurchaseTotal(purchaseTotal, discountId)
+
+      const newPurchase = await createNewPurchase(id_user, newPurchaseTotal, discountId);
       await addPurchaseProducts(newPurchase.id_purchase, purchaseIdList);
       const populatedPurchase = await PurchaseProduct.findAll({
         attributes: ['id_purchase_product', 'product_id', 'purchase_id', 'createdAt'],
