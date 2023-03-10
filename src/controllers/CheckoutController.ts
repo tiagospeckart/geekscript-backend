@@ -17,11 +17,8 @@ export default class checkoutController {
       const verifyToken: any = jwt.verify(getToken, process.env.SECRET as string);
       const user_id = verifyToken.id_user;
 
-      // PROBLEMA: Desconto pode vir undefined
-      //           Não pode vir numero   
-      //           String errada
       if(discountName){
-        // =========  CHECAR SE DISCONTO EXISTE  ======== //
+        // =========  SE EXISTIR DESCONTO  ======== //
         console.log(discountName)
         const discount =  await Discount.findOne({where: { name: discountName }})
         .catch((error) => {
@@ -30,8 +27,10 @@ export default class checkoutController {
         });
 
         console.log(discount)
-        // =========  SE DESCONTO, PEGAR VALOR  ======= //
-        // discount não poderia ser nulo aqui
+        // ===  SE COM DESCONTO DESCONTO, PEGAR VALOR  === //
+        
+        // Discount não poderia ser nulo aqui
+        // Arrumar um jeito de passar Discount se exisir
 
         if(discount){
           let discountValue = discount.value;
@@ -41,6 +40,7 @@ export default class checkoutController {
         console.log(discount?.id_discount)
 
         // ===========  CRIAR NOVA COMPRA  =========== //
+
         const newPurchase: Purchase = await Purchase.create({
           user_id,
           total: purchaseTotal,
@@ -50,6 +50,7 @@ export default class checkoutController {
         });
 
         // ====== POPULAR COMPRA COM PRODUTOS  ========== //
+
         checkoutArray(purchaseIdList, newPurchase);
         const finishedPurchase = await PurchaseProduct.findAll({ 
           attributes: ['id_purchase_product','product_id', 'purchase_id', 'createdAt'],
@@ -63,6 +64,9 @@ export default class checkoutController {
         });
         return res.status(201).json(finishedPurchase);
         } else {
+
+        // ============  SE SEM DESCONTO ============  //
+
         // ===========  CRIAR NOVA COMPRA  =========== //
         const newPurchase: Purchase = await Purchase.create({
           user_id,
@@ -72,9 +76,11 @@ export default class checkoutController {
         });
 
         // ====== POPULAR COMPRA COM PRODUTOS  ========== //
+
         checkoutArray(purchaseIdList, newPurchase);
 
         // =======  RETORNAR JSON RESPOSTA  ============ //
+
         const finishedPurchase = await PurchaseProduct.findAll({ 
           attributes: ['id_purchase_product','product_id', 'purchase_id', 'createdAt'],
           where: { 
@@ -87,7 +93,6 @@ export default class checkoutController {
         });
         return res.status(201).json(finishedPurchase);
         }
-      
     } catch {
       return res.status(400).json(MESSAGE.ERROR.CHECKOUT);
     }
