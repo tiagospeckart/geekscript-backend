@@ -1,10 +1,4 @@
-import {
-  DataTypes,
-  CreationOptional,
-  InferAttributes,
-  InferCreationAttributes,
-  Model,
-} from 'sequelize';
+import { DataTypes, CreationOptional, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
 import { mySqlConection } from '../database';
 
 const dbConnection = mySqlConection.getInstance();
