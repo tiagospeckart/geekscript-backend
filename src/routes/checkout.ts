@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import checkoutController from '../controllers/CheckoutController';
-import userAuthentication from "../Middlewares/authentication";
+import checkoutValidation from "../Validations/Checkout/create";
 
 const router = Router();
 
-router.post("/", checkoutController.create);
+router.post("/", checkoutValidation, checkoutController.create);
 
 export default router;
