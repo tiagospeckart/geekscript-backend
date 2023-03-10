@@ -14,13 +14,13 @@ export default class loginController {
     if (!dataUser) {
       return res
         .status(401)
-        .json(MESSAGE.ERROR.EMAIL);
+        .json(MESSAGE.ERROR.INVALID_DATA);
     }
 
     if (!bcrypt.compareSync(password, dataUser.password)) {
       return res
         .status(401)
-        .json(MESSAGE.ERROR.EMAIL);
+        .json(MESSAGE.ERROR.INVALID_DATA);
     }
 
     try {
