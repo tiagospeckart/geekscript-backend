@@ -712,12 +712,12 @@
                 "$ref": "#/components/schemas/Checkout"
               },
               "example": {
-                "purchaseTotal": "458.23",
+                "purchaseTotal": 458.23,
                 "purchaseIdList": [
                   1,
                   2
                 ],
-                "discountName": "Cupom 15"
+                "discountName": "coupon15"
               }
             }
           },
