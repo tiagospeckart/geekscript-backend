@@ -11,7 +11,7 @@ const router = Router();
 router.post("/register", createValidation, UserController.create);
 // client routes
 router.get("/profile", userAuthentication, UserController.findMyUser);
-router.get('/profile/purchases', PurchaseController.findAllUserPurchase);
+router.get('/profile/purchases', userAuthentication, PurchaseController.findAllUserPurchase);
 router.put("/profile/edit", userAuthentication, UserController.updateMyUser);
 router.delete("/profile/delete", userAuthentication, UserController.deleteMyUser);
 // admin routes
