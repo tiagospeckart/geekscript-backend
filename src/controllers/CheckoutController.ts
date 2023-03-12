@@ -4,11 +4,13 @@ import MESSAGE from "../constants/messages";
 import getUserIdFromToken from "../helpers/getUserIdFromToken";
 
 async function getDiscountId(discountName: string): Promise<number | undefined> {
+
   if (!discountName) {
     return undefined;
   }
   const discount = await Discount.findOne({ where: { name: discountName } });
-  if (!discount) {
+
+if (!discount) {
     return undefined;
   }
   return discount.id_discount;
@@ -36,6 +38,7 @@ async function addPurchaseProducts(purchaseId: number, purchaseIdList: number[])
     });
   };
   const promises = purchaseIdList.map(createPurchaseProduct);
+
 
   return Promise.all(promises);
 }

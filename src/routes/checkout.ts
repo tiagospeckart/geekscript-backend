@@ -1,8 +1,9 @@
 import { Router } from 'express';
-import CheckoutController from '../controllers/CheckoutController';
+import checkoutController from '../controllers/CheckoutController';
+import checkoutValidation from "../Validations/Checkout/create";
 
 const router = Router();
 
-router.post("/", CheckoutController.create);
+router.post("/", checkoutValidation, checkoutController.create);
 
 export default router;
