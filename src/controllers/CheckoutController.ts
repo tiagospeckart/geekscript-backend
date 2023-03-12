@@ -1,28 +1,26 @@
 import { Request, Response } from "express";
 import { Discount, Purchase, PurchaseProduct } from '../models';
-import jwt from 'jsonwebtoken';
 import MESSAGE from "../constants/messages";
+import getUserIdFromToken from "../helpers/getUserIdFromToken";
 
-async function getDiscount(discountName: string): Promise<number | undefined> {
+async function getDiscountId(discountName: string): Promise<number | undefined> {
+
   if (!discountName) {
     return undefined;
   }
   const discount = await Discount.findOne({ where: { name: discountName } });
 
-  if (!discount) {
-    throw new Error('Invalid discount name');
+if (!discount) {
+    return undefined;
   }
   return discount.id_discount;
 }
 
 async function getNewPurchaseTotal(purchaseTotal: number, discountId?: number): Promise<number> {
-    if (!discountId) {
+  if (!discountId) {
     return purchaseTotal;
   }
-  const discount = await Discount.findByPk(discountId);
-  if (!discount) {
-    throw new Error('Invalid discount name');
-  }
+  const discount = await Discount.findByPk(discountId) as Discount;
   const newPurchaseTotal = purchaseTotal - discount.value;
   return newPurchaseTotal;
 }
@@ -41,6 +39,7 @@ async function addPurchaseProducts(purchaseId: number, purchaseIdList: number[])
   };
   const promises = purchaseIdList.map(createPurchaseProduct);
 
+
   return Promise.all(promises);
 }
 
@@ -48,11 +47,8 @@ export default class CheckoutController {
   static async create(req: Request, res: Response): Promise<Response> {
     try {
       const { purchaseIdList, discountName, purchaseTotal } = req.body;
-      const authHeader = req.headers.authorization as string;
-      const token = authHeader.split(' ')[1];
-      const { id_user } = jwt.verify(token, process.env.SECRET as string) as { id_user: number };
-
-      const discountId = await getDiscount(discountName);
+      const id_user = getUserIdFromToken(req) as number;
+      const discountId = await getDiscountId(discountName);
       const newPurchaseTotal = getNewPurchaseTotal(purchaseTotal, discountId)
 
       const newPurchase = await createNewPurchase(id_user, newPurchaseTotal, discountId);
@@ -69,7 +65,7 @@ export default class CheckoutController {
       return res.status(201).json(populatedPurchase);
     } catch (error) {
       console.error(error);
-      return res.status(400).json(MESSAGE.ERROR.CHECKOUT);
+      return res.status(400).json({ "message": MESSAGE.ERROR.CHECKOUT });
     }
   }
 }
