@@ -1,16 +1,16 @@
 import { Router } from "express";
-import productController from "../controllers/ProductController";
-import createValidation from "../Validations/Product/create";
-import updateValidation from "../Validations/Product/update";
-import userAuthentication from "../Middlewares/authentication";
-import adminVerification from "../Middlewares/adminVerification";
+import ProductController from "../controllers/ProductController";
+import createValidation from "../validations/Product/create";
+import updateValidation from "../validations/Product/update";
+import userAuthentication from "../middlewares/authentication";
+import adminVerification from "../middlewares/adminVerification";
 
 const router = Router();
 
-router.post("/admin", userAuthentication, createValidation, adminVerification,productController.create);
-router.get("/catalog/", productController.findAll);
-router.get("/:id", productController.findOne);
-router.put("/admin/:id", userAuthentication, updateValidation, adminVerification, productController.update);
-router.delete("/admin/:id", userAuthentication, adminVerification, productController.delete);
+router.post("/admin", userAuthentication, adminVerification, createValidation, ProductController.create);
+router.get("/catalog/", ProductController.findAll);
+router.get("/:id", ProductController.findOne);
+router.put("/admin/:id", userAuthentication, adminVerification, updateValidation, ProductController.update);
+router.delete("/admin/:id", userAuthentication, adminVerification, ProductController.delete);
 
 export default router;

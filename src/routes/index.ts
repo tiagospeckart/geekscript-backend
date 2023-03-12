@@ -1,25 +1,24 @@
 import { Router } from 'express';
-import product from './product';
-import purchase from './purchase';
-import login from './login';
-import category from './category';
-import user from './user';
-import checkout from './checkout';
-import discount from './discount'
-import userAuthentication from "../Middlewares/authentication";
-import adminVerification from "../Middlewares/adminVerification";
-import productController from '../controllers/ProductController';
-
+import userAuthentication from "../middlewares/authentication";
+import adminVerification from "../middlewares/adminVerification";
+import ProductController from '../controllers/ProductController';
+import productRoutes from './product';
+import purchaseRoutes from './purchase';
+import loginRoutes from './login';
+import categoryRoutes from './category';
+import userRoutes from './user';
+import checkoutRoutes from './checkout';
+import discountRoutes from './discount';
 
 const router = Router();
 
-router.use('/home', productController.findAll);
-router.use('/user', user);
-router.use('/product', product);
-router.use('/category',category);
-router.use('/purchase', purchase);
-router.use('/login', login);
-router.use('/checkout', userAuthentication, checkout);
-router.use('/discount', userAuthentication, adminVerification, discount);
+router.use('/home', ProductController.findAll);
+router.use('/user', userRoutes);
+router.use('/product', productRoutes);
+router.use('/category', categoryRoutes);
+router.use('/purchase', userAuthentication, purchaseRoutes);
+router.use('/login', loginRoutes);
+router.use('/checkout', userAuthentication, checkoutRoutes);
+router.use('/discount', userAuthentication, adminVerification, discountRoutes);
 
 export default router
