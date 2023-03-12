@@ -15,13 +15,10 @@ async function getDiscountId(discountName: string): Promise<number | undefined> 
 }
 
 async function getNewPurchaseTotal(purchaseTotal: number, discountId?: number): Promise<number> {
-    if (!discountId) {
+  if (!discountId) {
     return purchaseTotal;
   }
-  const discount = await Discount.findByPk(discountId);
-  if (!discount) {
-    throw new Error('Invalid discount name');
-  }
+  const discount = await Discount.findByPk(discountId) as Discount;
   const newPurchaseTotal = purchaseTotal - discount.value;
   return newPurchaseTotal;
 }
@@ -68,7 +65,7 @@ export default class CheckoutController {
       return res.status(201).json(populatedPurchase);
     } catch (error) {
       console.error(error);
-      return res.status(400).json(MESSAGE.ERROR.CHECKOUT);
+      return res.status(400).json({ "message": MESSAGE.ERROR.CHECKOUT });
     }
   }
 }

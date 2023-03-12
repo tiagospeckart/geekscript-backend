@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import key from '../configs/jwtKey';
 import MESSAGE from '../constants/messages';
 
-export default class loginController {
+export default class LoginController {
   static login = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
     const { email, password } = req.body;
 
@@ -14,13 +14,13 @@ export default class loginController {
     if (!dataUser) {
       return res
         .status(401)
-        .json(MESSAGE.ERROR.INVALID_DATA);
+        .json({ "message": MESSAGE.ERROR.INVALID_DATA });
     }
 
     if (!bcrypt.compareSync(password, dataUser.password)) {
       return res
         .status(401)
-        .json(MESSAGE.ERROR.INVALID_DATA);
+        .json({ "message": MESSAGE.ERROR.INVALID_DATA });
     }
 
     try {
@@ -37,7 +37,7 @@ export default class loginController {
 
       return res.status(200).json({ id: dataUser.id_user, token: token });
     } catch (error) {
-      return res.status(500).json(MESSAGE.ERROR.TOKEN);
+      return res.status(500).json({ "message": MESSAGE.ERROR.TOKEN });
     }
   };
 }
