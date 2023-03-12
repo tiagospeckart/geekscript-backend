@@ -8,9 +8,8 @@ async function getDiscountId(discountName: string): Promise<number | undefined> 
     return undefined;
   }
   const discount = await Discount.findOne({ where: { name: discountName } });
-
   if (!discount) {
-    throw new Error('Invalid discount name');
+    return undefined;
   }
   return discount.id_discount;
 }
