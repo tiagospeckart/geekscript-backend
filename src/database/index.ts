@@ -1,14 +1,14 @@
 import Connection from "./connection";
-import { authDB } from "../configs/authDB";
+import config from "../configs/config";
 
 const mySqlConection = new Connection(
-  authDB.database,
-  authDB.username,
-  authDB.password,
+  config.db.name,
+  config.db.user,
+  config.db.pass,
   {
-    dialect: authDB.dialect,
-    port: authDB.port,
-    host: authDB.host,
+    dialect: config.db.dialect,
+    port: config.db.port,
+    host: config.db.host,
   }
 );
 

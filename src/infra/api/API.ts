@@ -2,7 +2,7 @@ import * as swaggerDocument from '../../api-docs/swagger.json'
 import 'dotenv/config'
 import express from "express";
 import router from "../../routes"
-import handleError from "../../Middlewares/handleError";
+import handleError from "../../middlewares/handleError";
 import cors from "cors";
 import { mySqlConection } from "../../database";
 import swaggerUi from 'swagger-ui-express'

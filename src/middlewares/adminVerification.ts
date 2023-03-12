@@ -1,23 +1,20 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import 'dotenv/config'
-
+import config from '../configs/config';
+import { User } from '../models';
 
 export default (req: Request, res: Response, next: NextFunction) => {
   try {
-    const authHeader: any = req.headers.authorization;
+    const authHeader = req.headers.authorization as string;
     const getToken = authHeader.split(' ')[1];
-    const verifyToken: any = jwt.verify(getToken, process.env.SECRET as string);
+    const verifyToken = jwt.verify(getToken, config.secret) as User;
 
-  
     if (verifyToken.scope === 'admin') {
       return next();
     } else {
-      return res.status(400).json('Admin exclusive route');
+      return res.status(401).json({ 'message': 'Admin exclusive route' });
     }
   } catch {
-    return res.status(500).json('Token error - Unable to verify user');
+    return res.status(401).json({ 'message': 'Token error - Unable to verify user' });
   }
 };
-
-//revisar os valores dos status

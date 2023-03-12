@@ -1,6 +1,7 @@
+import config from './configs/config';
 import app from './infra/api/API'
 
-app.listen(process.env.APP_PORT || 5000, () => {
-  console.info(`Server listening on Port: ${process.env.APP_PORT}`);
+app.listen(config.app.port, () => {
+  console.info(`Server listening on Port: ${config.app.port}`);
 });
 

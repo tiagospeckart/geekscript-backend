@@ -1,8 +1,9 @@
 import { Router } from 'express';
-import purchaseController from '../controllers/PurchaseController';
-import updateValidation from "../Validations/User/update";
-import userAuthentication from "../Middlewares/authentication";
-import userController from '../controllers/UserController';
+import PurchaseController from '../controllers/PurchaseController';
+import UserController from '../controllers/UserController';
+import updateValidation from "../validations/User/update";
+import userAuthentication from "../middlewares/authentication";
+import adminVerification from '../middlewares/adminVerification';
 
 const router = Router();
 
@@ -11,9 +12,9 @@ const router = Router();
 // Admins acessam todas
 // Passar middleware de Adm no getAll
 
-router.get('/admin', userAuthentication, purchaseController.findAll);
-router.get('/:id', userAuthentication, userController.findAllUserPurchase);
-router.put('/admin/:id', userAuthentication, updateValidation, purchaseController.update);
-router.delete('/admin/:id', userAuthentication, purchaseController.delete);
+router.get('/admin', adminVerification, PurchaseController.findAll);
+router.get('/:id', UserController.findAllUserPurchase); // refactor
+router.put('/admin/:id', adminVerification, updateValidation, PurchaseController.update);
+router.delete('/admin/:id', adminVerification, PurchaseController.delete);
 
 export default router;
