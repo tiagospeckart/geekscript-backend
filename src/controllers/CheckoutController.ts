@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { Discount, Purchase, PurchaseProduct } from '../models';
-import jwt from 'jsonwebtoken';
 import MESSAGE from "../constants/messages";
+import getUserIdFromToken from "../helpers/getUserIdFromToken";
 
 async function getDiscountId(discountName: string): Promise<number | undefined> {
   if (!discountName) {
@@ -44,10 +44,7 @@ export default class CheckoutController {
   static async create(req: Request, res: Response): Promise<Response> {
     try {
       const { purchaseIdList, discountName, purchaseTotal } = req.body;
-      const authHeader = req.headers.authorization as string;
-      const token = authHeader.split(' ')[1];
-      const { id_user } = jwt.verify(token, process.env.SECRET as string) as { id_user: number };
-
+      const id_user = getUserIdFromToken(req) as number;
       const discountId = await getDiscountId(discountName);
       const newPurchaseTotal = getNewPurchaseTotal(purchaseTotal, discountId)
 

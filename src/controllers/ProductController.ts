@@ -21,16 +21,18 @@ export default class ProductController {
 
   static findAll = async (req: Request, res: Response): Promise<Response> => {
     try {
-      
-      //filter by category
+
+      //filter by category (optional)
       const categoryUrl = req.query.category;
 
       if (categoryUrl) {
         const findProducts = await Product.findAll({
+          attributes: { exclude: ['updatedAt', 'deletedAt'] },
           include: {
             model: Category,
             where: {
               name: categoryUrl,
+              attributes: ['name'],
             },
           },
         });
@@ -38,8 +40,10 @@ export default class ProductController {
       }
 
       const findProducts = await Product.findAll({
+        attributes: { exclude: ['updatedAt', 'deletedAt'] },
         include: {
           model: Category,
+          attributes: ['name'],
         },
       });
       return res.status(200).json(findProducts);

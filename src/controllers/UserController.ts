@@ -37,19 +37,6 @@ export default class UserController {
     }
   };
 
-  static findAllUserPurchase = async (req: Request, res: Response): Promise<Response> => {
-    const { id } = req.params;
-    try {
-      const findUsers = await User.findByPk(id, {
-        include: Purchase,
-        attributes: { exclude: ['password', 'scope', 'email'] },
-      });
-      return res.status(200).json(findUsers);
-    } catch (error) {
-      return res.status(500).json({ "message": MESSAGE.ERROR.SEARCH_DB });
-    }
-  };
-
   static findOne = async (req: Request, res: Response): Promise<Response> => {
     try {
       const { id } = req.params;
@@ -60,8 +47,11 @@ export default class UserController {
       }
 
       findUser = await User.findByPk(id, {
-        include: Purchase,
-        attributes: { exclude: ['password'] },
+        attributes: { exclude: ['password', 'deletedAt'] },
+        include: {
+          model: Purchase,
+          attributes: ['id_purchase', 'discount_id', 'total'],
+        },
       });
       return res.status(200).json(findUser);
     } catch {
@@ -94,7 +84,9 @@ export default class UserController {
         }
       );
 
-      const showUser = await User.findByPk(id);
+      const showUser = await User.findByPk(id, {
+        attributes: { exclude: ['deletedAt', 'password'] },
+      });
       return res.status(200).json(showUser);
     } catch (error) {
       return res.status(500).json({ "message": MESSAGE.ERROR.UPDATE_REGISTER });

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { Purchase, User } from '../models';
 import MESSAGE from '../constants/messages';
+import getUserIdFromToken from '../helpers/getUserIdFromToken';
 
 export default class PurchaseController {
   static create = async (req: Request, res: Response): Promise<Response> => {
@@ -40,7 +41,6 @@ export default class PurchaseController {
       if (!findPurchase) {
         return res.status(404).json({ "message": MESSAGE.ERROR.ID_NOT_FOUND });
       }
-
       findPurchase = await Purchase.findByPk(id, {
         include: User,
         attributes: {
@@ -49,6 +49,23 @@ export default class PurchaseController {
       });
       return res.status(200).json(findPurchase);
     } catch {
+      return res.status(500).json({ "message": MESSAGE.ERROR.SEARCH_DB });
+    }
+  };
+
+  static findAllUserPurchase = async (req: Request, res: Response): Promise<Response> => {
+    const id_user = getUserIdFromToken(req) as number;
+    try {
+      const findUserPurchases = await Purchase.findAll({
+        where: { user_id: id_user },
+        attributes: ['id_purchase', 'total', 'createdAt', 'discount_id'],
+        include: {
+          model: User, 
+          attributes: ['id_user', 'name'],
+        },
+      });
+      return res.status(200).json(findUserPurchases);
+    } catch (error) {
       return res.status(500).json({ "message": MESSAGE.ERROR.SEARCH_DB });
     }
   };
