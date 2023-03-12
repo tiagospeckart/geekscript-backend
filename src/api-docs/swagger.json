@@ -753,35 +753,21 @@
         ]
       }
     },
-    "/purchase/{id_user}": {
+    "/purchase/my-purchases": {
       "get": {
         "tags": [
-          "Purchase"
+          "Purchase",
+          "User"
         ],
-        "summary": "Returns an user object containing an array of purchases made by user",
+        "summary": "Returns a list of purchases made by logged user",
         "operationId": "getClientPurchases",
-        "parameters": [
-          {
-            "name": "id_user",
-            "in": "path",
-            "description": "User ID",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "minimum": 1,
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "$ref": "#/components/schemas/ArrayPurchase"
                 }
               }
             }
