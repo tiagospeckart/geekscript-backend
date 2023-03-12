@@ -11,7 +11,7 @@
       "name": "MIT",
       "url": "https://opensource.org/license/mit/"
     },
-    "version": "1.1.2"
+    "version": "1.1.3"
   },
   "servers": [
     {
@@ -30,23 +30,23 @@
     },
     {
       "name": "User",
-      "description": "Operations for users"
+      "description": "Operations for Users"
     },
     {
       "name": "Product",
-      "description": "Finding products and adding them to the cart"
+      "description": "Finding Products and adding them to the cart"
     },
     {
       "name": "Purchase",
-      "description": "Buying selected products"
+      "description": "Buying Products and other Purchase operations"
     },
     {
       "name": "Category",
-      "description": "Categories for products"
+      "description": "Categories operations for Products"
     },
     {
       "name": "Discount",
-      "description": "Discount coupons for purchases"
+      "description": "Discount coupons operations for Purchases"
     },
     {
       "name": "Admin",
@@ -171,10 +171,252 @@
         }
       }
     },
-    "/user/{id_user}": {
+    "/user/profile": {
       "get": {
         "tags": [
           "User"
+        ],
+        "summary": "Returns current logged User data",
+        "operationId": "getLoggedUser",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "example": {
+                  "id_user": 3,
+                  "name": "Test Name",
+                  "email": "test@email.com",
+                  "password": "testpass123",
+                  "isAdm": 0,
+                  "createdAt": "2023-02-24T13:01:02.700Z",
+                  "updatedAt": "2023-02-24T13:01:02.700Z"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "ID not found"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/user/profile/purchases": {
+      "get": {
+        "tags": [
+          "Purchase",
+          "User"
+        ],
+        "summary": "Returns a list of purchases made by logged user",
+        "operationId": "getClientPurchases",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayPurchase"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "ID not found"
+              }
+            }
+          },
+          "500": {
+            "description": "Server side error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "Unable to perform this action"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/user/profile/edit": {
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Updates current logged User data",
+        "operationId": "updateLoggedUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "User updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "example": {
+                  "id_user": 3,
+                  "name": "Tester Alter",
+                  "email": "email@tester.com",
+                  "password": "$2a$10$1Rih7rJk0iWrK0zK.Zfxwu7ADhZW5c1kWQMrEtHx.d4Jb/ekHUpuK",
+                  "isAdm": 0,
+                  "createdAt": "2023-02-24T13:01:02.700Z",
+                  "updatedAt": "2023-02-24T13:01:02.700Z"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "ID not found"
+              }
+            }
+          },
+          "500": {
+            "description": "Server side error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "Unable to update data"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/user/profile/delete": {
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Deletes current logged User data",
+        "operationId": "deleteLoggedUser",
+        "responses": {
+          "204": {
+            "description": "Request recieved and understood, but no need to send data back"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "ID not found"
+              }
+            }
+          },
+          "500": {
+            "description": "Unable to delete data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "Unable to delete data"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/user/admin": {
+      "get": {
+        "tags": [
+          "Admin",
+          "User"
+        ],
+        "summary": "Returns a list of all Users",
+        "operationId": "getAllUser",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayUser"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server side error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "Unable to perform this action"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/user/admin/{id_user}": {
+      "get": {
+        "tags": [
+          "User",
+          "Admin"
         ],
         "summary": "Returns a User by ID",
         "operationId": "getOneUser",
@@ -366,50 +608,12 @@
         ]
       }
     },
-    "/user/admin": {
-      "get": {
-        "tags": [
-          "Admin",
-          "User"
-        ],
-        "summary": "Returns a list of Users",
-        "operationId": "getAllUser",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ArrayUser"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server side error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                },
-                "example": "Unable to perform this action"
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      }
-    },
     "/product/catalog/": {
       "get": {
         "tags": [
           "Product"
         ],
-        "summary": "Returns a list of Products with option to select by Category",
+        "summary": "Returns a list of all Products with option to select by Category",
         "operationId": "getProducts",
         "parameters": [
           {
@@ -454,7 +658,7 @@
         "tags": [
           "Product"
         ],
-        "summary": "Returns a Product object",
+        "summary": "Returns a Product by ID",
         "operationId": "getOneProduct",
         "parameters": [
           {
@@ -753,55 +957,6 @@
         ]
       }
     },
-    "/purchase/my-purchases": {
-      "get": {
-        "tags": [
-          "Purchase",
-          "User"
-        ],
-        "summary": "Returns a list of purchases made by logged user",
-        "operationId": "getClientPurchases",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ArrayPurchase"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                },
-                "example": "ID not found"
-              }
-            }
-          },
-          "500": {
-            "description": "Server side error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                },
-                "example": "Unable to perform this action"
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      }
-    },
     "/purchase/admin": {
       "get": {
         "tags": [
@@ -1011,7 +1166,7 @@
         "tags": [
           "Category"
         ],
-        "summary": "Returns all Categories as an array of objects",
+        "summary": "Returns a list of all Categories",
         "operationId": "getAllCategory",
         "responses": {
           "200": {
@@ -1313,7 +1468,7 @@
           "Discount",
           "Admin"
         ],
-        "summary": "Returns all Discounts as an array of objects",
+        "summary": "Returns a list of all Discounts",
         "operationId": "getAllDiscounts",
         "responses": {
           "200": {
@@ -1783,7 +1938,7 @@
         "required": [
           "message"
         ],
-        "type": "string",
+        "type": "object",
         "properties": {
           "message": {
             "type": "string"
