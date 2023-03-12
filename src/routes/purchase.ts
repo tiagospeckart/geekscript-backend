@@ -6,7 +6,6 @@ import adminVerification from '../middlewares/adminVerification';
 const router = Router();
 
 router.get('/admin', adminVerification, PurchaseController.findAll);
-router.get('/my-purchases', PurchaseController.findAllUserPurchase); // refactor
 router.put('/admin/:id', adminVerification, updateValidation, PurchaseController.update);
 router.delete('/admin/:id', adminVerification, PurchaseController.delete);
 

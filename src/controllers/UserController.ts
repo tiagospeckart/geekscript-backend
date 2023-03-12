@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { Purchase, User } from '../models';
 import bcrypt from 'bcryptjs';
 import MESSAGE from '../constants/messages';
+import getUserIdFromToken from '../helpers/getUserIdFromToken';
 
 export default class UserController {
   static create = async (req: Request, res: Response): Promise<Response> => {
@@ -59,6 +60,24 @@ export default class UserController {
     }
   };
 
+  static findMyUser = async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const userId = getUserIdFromToken(req);
+      let findUser = await User.findByPk(userId);
+
+      if (!findUser) {
+        return res.status(404).json({ "message": MESSAGE.ERROR.ID_NOT_FOUND });
+      }
+
+      findUser = await User.findByPk(userId, {
+        attributes: { exclude: ['password', 'deletedAt'] },
+      });
+      return res.status(200).json(findUser);
+    } catch {
+      return res.status(500).json({ "message": MESSAGE.ERROR.SEARCH_DB });
+    }
+  };
+
   static update = async (req: Request, res: Response): Promise<Response> => {
     try {
       const { id } = req.params;
@@ -93,6 +112,40 @@ export default class UserController {
     }
   };
 
+  static updateMyUser = async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const userId = getUserIdFromToken(req);
+      const { name, email, password, scope } = req.body;
+      const checkUser = await User.findByPk(userId);
+      if (!checkUser) {
+        return res.status(404).json({ "message": MESSAGE.ERROR.ID_NOT_FOUND });
+      }
+
+      const criptoPassword = password ? bcrypt.hashSync(password, 10): checkUser.password;
+
+      await User.update(
+        {
+          name,
+          email,
+          password: criptoPassword,
+          scope,
+        },
+        {
+          where: {
+            id_user: userId,
+          },
+        }
+      );
+
+      const showUser = await User.findByPk(userId, {
+        attributes: { exclude: ['deletedAt', 'password'] },
+      });
+      return res.status(200).json(showUser);
+    } catch (error) {
+      return res.status(500).json({ "message": MESSAGE.ERROR.UPDATE_REGISTER });
+    }
+  };
+
   static delete = async (req: Request, res: Response): Promise<Response> => {
     try {
       const { id } = req.params;
@@ -104,6 +157,25 @@ export default class UserController {
       await User.destroy({
         where: {
           id_user: id,
+        },
+      });
+      return res.status(204).json();
+    } catch (error) {
+      return res.status(500).json({ "message": MESSAGE.ERROR.DELETE });
+    }
+  };
+
+  static deleteMyUser = async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const userId = getUserIdFromToken(req);
+
+      let deleteUser = await User.findByPk(userId);
+      if (!deleteUser) {
+        return res.status(404).json({ "message": MESSAGE.ERROR.ID_NOT_FOUND });
+      }
+      await User.destroy({
+        where: {
+          id_user: userId,
         },
       });
       return res.status(204).json();

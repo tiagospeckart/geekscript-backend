@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Discount, Purchase, PurchaseProduct } from '../models';
+import { Discount, Product, Purchase, PurchaseProduct } from '../models';
 import MESSAGE from "../constants/messages";
 import getUserIdFromToken from "../helpers/getUserIdFromToken";
 
@@ -56,10 +56,14 @@ export default class CheckoutController {
       const populatedPurchase = await PurchaseProduct.findAll({
         attributes: ['id_purchase_product', 'product_id', 'purchase_id', 'createdAt'],
         where: { purchase_id: newPurchase.id_purchase },
-        include: {
+        include: [{
           model: Purchase,
-          attributes: ['user_id', 'discount_id', 'total'],
+          attributes: ['discount_id', 'total'],
         },
+        {
+          model: Product,
+          attributes: ['name', 'price'],
+        }],
       });
 
       return res.status(201).json(populatedPurchase);

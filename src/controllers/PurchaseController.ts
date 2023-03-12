@@ -23,7 +23,7 @@ export default class PurchaseController {
         include: {
           model: User, 
           attributes: { 
-            exclude: ['password','email', 'scope', 'createdAt', 'updatedAt']
+            exclude: ['password','email', 'scope','updatedAt','deletedAt']
           }},
       });
 

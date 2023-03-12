@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import checkoutController from '../controllers/CheckoutController';
-import checkoutValidation from "../Validations/Checkout/create";
+import checkoutValidation from "../validations/Checkout/create";
 
 const router = Router();
 
