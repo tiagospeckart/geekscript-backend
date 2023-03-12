@@ -11,7 +11,7 @@
       "name": "MIT",
       "url": "https://opensource.org/license/mit/"
     },
-    "version": "1.0.9"
+    "version": "1.1.3"
   },
   "servers": [
     {
@@ -30,23 +30,27 @@
     },
     {
       "name": "User",
-      "description": "Operations for users"
+      "description": "Operations for Users"
     },
     {
       "name": "Product",
-      "description": "Finding products and adding them to the cart"
+      "description": "Finding Products and adding them to the cart"
     },
     {
       "name": "Purchase",
-      "description": "Buying selected products"
+      "description": "Buying Products and other Purchase operations"
     },
     {
       "name": "Category",
-      "description": "Categories for products"
+      "description": "Categories operations for Products"
+    },
+    {
+      "name": "Discount",
+      "description": "Discount coupons operations for Purchases"
     },
     {
       "name": "Admin",
-      "description": "Admin panel interfaces"
+      "description": "Admin endpoints"
     }
   ],
   "paths": {
@@ -64,8 +68,8 @@
                 "$ref": "#/components/schemas/Login"
               },
               "example": {
-                "email": "test@email.com",
-                "password": "testpass123"
+                "email": "admin@admin.com",
+                "password": "admin123"
               }
             }
           },
@@ -78,16 +82,32 @@
               "application/json": {
                 "schema": {
                   "type": "string",
-                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoxLCJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGFkbWluLmNvbSIsInNjb3BlIjoiYWRtaW4iLCJpYXQiOjE2Nzc3OTk4OTUsImV4cCI6MTY4MDM5MTg5NX0.QRbfJMwiEtvW7FU8cJBaw28n79B6OV50B4wgDXw2cKg"
+                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoxLCJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGFkbWluLmNvbSIsInNjb3BlIjoiYWRtaW4iLCJpYXQiOjE2NzgxNDM1OTksImV4cCI6MTY4MDczNTU5OX0.W4bI0RxLCQAGWzo0uQNwc9B0G5p6nWGbTwwAdTGnAqA"
                 }
               }
             }
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorised",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "Invalid e-mail or password, please try again"
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Server side error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "Unable to generate a token"
+              }
+            }
           }
         }
       }
@@ -127,28 +147,276 @@
             }
           },
           "400": {
-            "description": "Request not understood, revise syntax"
-          },
-          "409": {
-            "description": "Duplicated entry",
+            "description": "Bad Request",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
                 },
-                "example": {
-                  "message": "Usuário já existente"
-                }
+                "example": "Unable to register user"
+              }
+            }
+          },
+          "409": {
+            "description": "Duplicated Entry",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "E-mail already registered"
               }
             }
           }
         }
       }
     },
-    "/user/{id_user}": {
+    "/user/profile": {
       "get": {
         "tags": [
           "User"
+        ],
+        "summary": "Returns current logged User data",
+        "operationId": "getLoggedUser",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "example": {
+                  "id_user": 3,
+                  "name": "Test Name",
+                  "email": "test@email.com",
+                  "password": "testpass123",
+                  "isAdm": 0,
+                  "createdAt": "2023-02-24T13:01:02.700Z",
+                  "updatedAt": "2023-02-24T13:01:02.700Z"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "ID not found"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/user/profile/purchases": {
+      "get": {
+        "tags": [
+          "Purchase",
+          "User"
+        ],
+        "summary": "Returns a list of purchases made by logged user",
+        "operationId": "getClientPurchases",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayPurchase"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "ID not found"
+              }
+            }
+          },
+          "500": {
+            "description": "Server side error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "Unable to perform this action"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/user/profile/edit": {
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Updates current logged User data",
+        "operationId": "updateLoggedUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "User updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "example": {
+                  "id_user": 3,
+                  "name": "Tester Alter",
+                  "email": "email@tester.com",
+                  "password": "$2a$10$1Rih7rJk0iWrK0zK.Zfxwu7ADhZW5c1kWQMrEtHx.d4Jb/ekHUpuK",
+                  "isAdm": 0,
+                  "createdAt": "2023-02-24T13:01:02.700Z",
+                  "updatedAt": "2023-02-24T13:01:02.700Z"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "ID not found"
+              }
+            }
+          },
+          "500": {
+            "description": "Server side error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "Unable to update data"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/user/profile/delete": {
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Deletes current logged User data",
+        "operationId": "deleteLoggedUser",
+        "responses": {
+          "204": {
+            "description": "Request recieved and understood, but no need to send data back"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "ID not found"
+              }
+            }
+          },
+          "500": {
+            "description": "Unable to delete data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "Unable to delete data"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/user/admin": {
+      "get": {
+        "tags": [
+          "Admin",
+          "User"
+        ],
+        "summary": "Returns a list of all Users",
+        "operationId": "getAllUser",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayUser"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server side error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "Unable to perform this action"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/user/admin/{id_user}": {
+      "get": {
+        "tags": [
+          "User",
+          "Admin"
         ],
         "summary": "Returns a User by ID",
         "operationId": "getOneUser",
@@ -188,7 +456,15 @@
             }
           },
           "404": {
-            "description": "Requested resource not found"
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "ID not found"
+              }
+            }
           }
         },
         "security": [
@@ -249,10 +525,26 @@
             }
           },
           "404": {
-            "description": "Id not found"
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "ID not found"
+              }
+            }
           },
           "500": {
-            "description": "Server side error"
+            "description": "Server side error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "Unable to update data"
+              }
+            }
           }
         },
         "security": [
@@ -284,43 +576,29 @@
         ],
         "responses": {
           "204": {
-            "description": "No content"
+            "description": "Request recieved and understood, but no need to send data back"
           },
           "404": {
-            "description": "Id not found"
-          },
-          "500": {
-            "description": "Server side error"
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      }
-    },
-    "/user/admin": {
-      "get": {
-        "tags": [
-          "Admin",
-          "User"
-        ],
-        "summary": "Returns a list of Users",
-        "operationId": "getAllUser",
-        "responses": {
-          "200": {
-            "description": "OK",
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ArrayUser"
-                }
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "ID not found"
               }
             }
           },
           "500": {
-            "description": "Server side error"
+            "description": "Unable to delete data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "Unable to delete data"
+              }
+            }
           }
         },
         "security": [
@@ -330,13 +608,26 @@
         ]
       }
     },
-    "/product/catalog": {
+    "/product/catalog/": {
       "get": {
         "tags": [
           "Product"
         ],
-        "summary": "Returns a list of Products",
-        "operationId": "getAllProducts",
+        "summary": "Returns a list of all Products with option to select by Category",
+        "operationId": "getProducts",
+        "parameters": [
+          {
+            "name": "category",
+            "in": "query",
+            "description": "Valid category name as query parameter to select a few products",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -349,7 +640,15 @@
             }
           },
           "500": {
-            "description": "Server side error"
+            "description": "Server side error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "Unable to perform this action"
+              }
+            }
           }
         }
       }
@@ -359,7 +658,7 @@
         "tags": [
           "Product"
         ],
-        "summary": "Returns a Product object",
+        "summary": "Returns a Product by ID",
         "operationId": "getOneProduct",
         "parameters": [
           {
@@ -388,10 +687,26 @@
             }
           },
           "404": {
-            "description": "Requested resource not found"
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "ID not found"
+              }
+            }
           },
           "500": {
-            "description": "Server side error"
+            "description": "Server side error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "Unable to perform this action"
+              }
+            }
           }
         },
         "security": [
@@ -438,7 +753,15 @@
             }
           },
           "400": {
-            "description": "Request not understood, revise syntax"
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "Unable to register product"
+              }
+            }
           }
         },
         "security": [
@@ -495,10 +818,26 @@
             }
           },
           "404": {
-            "description": "Requested resource not found"
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "ID not found"
+              }
+            }
           },
           "500": {
-            "description": "Server side error"
+            "description": "Server side error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "Unable to update data"
+              }
+            }
           }
         },
         "security": [
@@ -533,11 +872,27 @@
           "204": {
             "description": "Request recieved and understood, but no need to send data back"
           },
-          "401": {
-            "description": "Access token is missing or invalid"
-          },
           "404": {
-            "description": "Requested resource not found"
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "ID not found"
+              }
+            }
+          },
+          "500": {
+            "description": "Unable to delete data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "Unable to delete data"
+              }
+            }
           }
         },
         "security": [
@@ -561,11 +916,12 @@
                 "$ref": "#/components/schemas/Checkout"
               },
               "example": {
-                "total": "458.23",
+                "purchaseTotal": 458.23,
                 "purchaseIdList": [
                   1,
                   2
-                ]
+                ],
+                "discountName": "coupon15"
               }
             }
           },
@@ -583,70 +939,15 @@
             }
           },
           "400": {
-            "description": "Request not understood, revise syntax"
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      }
-    },
-    "/purchase/{id_user}": {
-      "get": {
-        "tags": [
-          "Purchase"
-        ],
-        "summary": "Returns an array of purchases made by user",
-        "operationId": "getClientPurchases",
-        "parameters": [
-          {
-            "name": "id_user",
-            "in": "path",
-            "description": "User ID",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "minimum": 1,
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
+            "description": "Unable to complete the purchase",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Purchase"
+                  "$ref": "#/components/schemas/Error"
                 },
-                "example": {
-                  "id_purchase": 1,
-                  "user_id": 1,
-                  "total": "393.73",
-                  "createdAt": "2023-02-27T21:29:52.000Z",
-                  "updatedAt": "2023-02-27T21:29:52.000Z",
-                  "User": {
-                    "id_user": 1,
-                    "name": "admin",
-                    "email": "admin@admin.com",
-                    "password": "$2a$10$xzMrCRtST3WU6Uid6EC0Cu33RtpNlulI12Ey0TPwH5j49CEzUDMha",
-                    "scope": "admin",
-                    "createdAt": "2023-02-27T21:29:52.000Z",
-                    "updatedAt": "2023-02-27T21:29:52.000Z"
-                  }
-                }
+                "example": "Unable to complete the purchase"
               }
             }
-          },
-          "404": {
-            "description": "Requested resource not found"
-          },
-          "500": {
-            "description": "Server side error"
           }
         },
         "security": [
@@ -681,12 +982,7 @@
                     "updatedAt": "2023-02-27T21:29:52.000Z",
                     "User": {
                       "id_user": 1,
-                      "name": "admin",
-                      "email": "admin@admin.com",
-                      "password": "$2a$10$xzMrCRtST3WU6Uid6EC0Cu33RtpNlulI12Ey0TPwH5j49CEzUDMha",
-                      "scope": "admin",
-                      "createdAt": "2023-02-27T21:29:52.000Z",
-                      "updatedAt": "2023-02-27T21:29:52.000Z"
+                      "name": "admin"
                     }
                   },
                   {
@@ -697,12 +993,7 @@
                     "updatedAt": "2023-02-27T21:29:52.000Z",
                     "User": {
                       "id_user": 2,
-                      "name": "Cliente Teste",
-                      "email": "cliente@cliente.com",
-                      "password": "$2a$10$FqCZADE/BPah3Ebp1jkTg.uXKBOXDnOEBuUbMwwHEgQp.67duPkN.",
-                      "scope": "client",
-                      "createdAt": "2023-02-27T21:29:52.000Z",
-                      "updatedAt": "2023-02-27T21:29:52.000Z"
+                      "name": "Cliente Teste"
                     }
                   }
                 ]
@@ -710,7 +1001,15 @@
             }
           },
           "500": {
-            "description": "Server side error"
+            "description": "Server side error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "Unable to perform this action"
+              }
+            }
           }
         },
         "security": [
@@ -771,22 +1070,33 @@
                   "updatedAt": "2023-02-27T21:29:52.000Z",
                   "User": {
                     "id_user": 1,
-                    "name": "admin",
-                    "email": "admin@admin.com",
-                    "password": "$2a$10$xzMrCRtST3WU6Uid6EC0Cu33RtpNlulI12Ey0TPwH5j49CEzUDMha",
-                    "scope": "admin",
-                    "createdAt": "2023-02-27T21:29:52.000Z",
-                    "updatedAt": "2023-02-27T21:29:52.000Z"
+                    "name": "admin"
                   }
                 }
               }
             }
           },
           "404": {
-            "description": "Requested resource not found"
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "ID not found"
+              }
+            }
           },
           "500": {
-            "description": "Server side error"
+            "description": "Server side error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "Unable to update data"
+              }
+            }
           }
         },
         "security": [
@@ -821,11 +1131,27 @@
           "204": {
             "description": "Request recieved and understood, but no need to send data back"
           },
-          "401": {
-            "description": "Access token is missing or invalid"
-          },
           "404": {
-            "description": "Requested resource not found"
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "ID not found"
+              }
+            }
+          },
+          "500": {
+            "description": "Unable to delete data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "Unable to delete data"
+              }
+            }
           }
         },
         "security": [
@@ -840,7 +1166,7 @@
         "tags": [
           "Category"
         ],
-        "summary": "Returns all the Categories as an array of objects",
+        "summary": "Returns a list of all Categories",
         "operationId": "getAllCategory",
         "responses": {
           "200": {
@@ -868,7 +1194,15 @@
             }
           },
           "500": {
-            "description": "Server side error"
+            "description": "Server side error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "Unable to perform this action"
+              }
+            }
           }
         }
       }
@@ -913,7 +1247,15 @@
             }
           },
           "404": {
-            "description": "Requested resource not found"
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "ID not found"
+              }
+            }
           }
         }
       }
@@ -957,21 +1299,24 @@
             }
           },
           "400": {
-            "description": "Request not understood, revise syntax"
-          },
-          "401": {
-            "description": "Access token is missing or invalid"
-          },
-          "409": {
-            "description": "Duplicated entry",
+            "description": "Bad Request",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
                 },
-                "example": {
-                  "message": "categoria já existente"
-                }
+                "example": "Unable to register category"
+              }
+            }
+          },
+          "409": {
+            "description": "Category already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "Category already exists"
               }
             }
           }
@@ -1022,29 +1367,36 @@
         },
         "responses": {
           "200": {
-            "description": "A JSON Category object",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Category"
-                },
-                "example": {
-                  "id_category": 1,
-                  "name": "Board Game",
-                  "createdAt": "2023-02-24T13:01:02.700Z",
-                  "updatedAt": "2023-02-25T13:01:02.700Z"
                 }
               }
             }
           },
-          "400": {
-            "description": "Request not understood, revise syntax"
-          },
-          "401": {
-            "description": "Access token is missing or invalid"
-          },
           "404": {
-            "description": "Requested resource not found"
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "ID not found"
+              }
+            }
+          },
+          "500": {
+            "description": "Server side error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "Unable to update data"
+              }
+            }
           }
         },
         "security": [
@@ -1080,11 +1432,297 @@
           "204": {
             "description": "Request recieved and understood, but no need to send data back"
           },
-          "401": {
-            "description": "Access token is missing or invalid"
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "ID not found"
+              }
+            }
+          },
+          "500": {
+            "description": "Unable to delete data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "Unable to delete data"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/discount/admin/": {
+      "get": {
+        "tags": [
+          "Discount",
+          "Admin"
+        ],
+        "summary": "Returns a list of all Discounts",
+        "operationId": "getAllDiscounts",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayDiscount"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server side error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "Unable to perform this action"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Discount",
+          "Admin"
+        ],
+        "summary": "Creates a new Discount",
+        "operationId": "createDiscount",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Discount"
+              },
+              "example": {
+                "name": "coupon15",
+                "value": 15
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Discount"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "Unable to register discount"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/discount/admin/{id_discount}": {
+      "get": {
+        "tags": [
+          "Discount",
+          "Admin"
+        ],
+        "summary": "Returns a Discount by ID",
+        "operationId": "getOneDiscount",
+        "parameters": [
+          {
+            "name": "id_discount",
+            "in": "path",
+            "description": "Discount ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Discount"
+                }
+              }
+            }
           },
           "404": {
-            "description": "Requested resource not found"
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "ID not found"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Discount",
+          "Admin"
+        ],
+        "summary": "Updates a Discount by ID",
+        "operationId": "updateDiscount",
+        "parameters": [
+          {
+            "name": "id_discount",
+            "in": "path",
+            "description": "Discount ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 1
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Discount"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Discount"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "ID not found"
+              }
+            }
+          },
+          "500": {
+            "description": "Server side error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "Unable to update data"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Discount",
+          "Admin"
+        ],
+        "summary": "Deletes a Discount by ID",
+        "operationId": "removeDiscount",
+        "parameters": [
+          {
+            "name": "id_discount",
+            "in": "path",
+            "description": "Discount ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 1
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Request recieved and understood, but no need to send data back"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "ID not found"
+              }
+            }
+          },
+          "500": {
+            "description": "Unable to delete data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": "Unable to delete data"
+              }
+            }
           }
         },
         "security": [
@@ -1097,26 +1735,12 @@
   },
   "components": {
     "schemas": {
-      "Category": {
-        "type": "object",
-        "properties": {
-          "id_category": {
-            "minimum": 1,
-            "type": "integer",
-            "format": "int64"
-          },
-          "name": {
-            "type": "string"
-          }
-        }
-      },
-      "ArrayCategory": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/Category"
-        }
-      },
       "User": {
+        "required": [
+          "email",
+          "name",
+          "password"
+        ],
         "type": "object",
         "properties": {
           "id_user": {
@@ -1140,13 +1764,47 @@
           }
         }
       },
-      "ArrayUser": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/User"
+      "Login": {
+        "required": [
+          "email",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
+          }
+        }
+      },
+      "Category": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id_category": {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          }
         }
       },
       "Product": {
+        "required": [
+          "category_id",
+          "description",
+          "name",
+          "photo",
+          "price"
+        ],
         "type": "object",
         "properties": {
           "id_product": {
@@ -1174,13 +1832,11 @@
           }
         }
       },
-      "ArrayProduct": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/Product"
-        }
-      },
       "Purchase": {
+        "required": [
+          "total",
+          "user_id"
+        ],
         "type": "object",
         "properties": {
           "id_purchase": {
@@ -1193,19 +1849,43 @@
             "type": "integer",
             "format": "int64"
           },
+          "discount_id": {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
           "total": {
             "type": "number",
             "format": "float"
           }
         }
       },
-      "ArrayPurchase": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/Purchase"
+      "Discount": {
+        "required": [
+          "name",
+          "value"
+        ],
+        "type": "object",
+        "properties": {
+          "id_discount": {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number"
+          }
         }
       },
       "Checkout": {
+        "required": [
+          "purchaseIdList",
+          "total"
+        ],
         "type": "object",
         "properties": {
           "total": {
@@ -1217,31 +1897,221 @@
             "items": {
               "type": "number"
             }
+          },
+          "discount_id": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
-      "Login": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "format": "email"
-          },
-          "password": {
-            "type": "string",
-            "format": "password"
-          }
-        },
-        "example": {
-          "email": "admin@admin.com",
-          "password": "admin123"
+      "ArrayUser": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/User"
+        }
+      },
+      "ArrayCategory": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Category"
+        }
+      },
+      "ArrayProduct": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Product"
+        }
+      },
+      "ArrayPurchase": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Purchase"
+        }
+      },
+      "ArrayDiscount": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Discount"
         }
       },
       "Error": {
-        "type": "string",
+        "required": [
+          "message"
+        ],
+        "type": "object",
         "properties": {
           "message": {
             "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "DeleteError": {
+        "description": "Unable to delete data",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": "Unable to delete data"
+          }
+        }
+      },
+      "DeleteSuccess": {
+        "description": "Request recieved and understood, but no need to send data back"
+      },
+      "CheckoutReg": {
+        "description": "Failed to create new purchase",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": "Failed to create new purchase"
+          }
+        }
+      },
+      "CheckoutError": {
+        "description": "Unable to complete the purchase",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": "Unable to complete the purchase"
+          }
+        }
+      },
+      "ExistCategory": {
+        "description": "Category already exists",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": "Category already exists"
+          }
+        }
+      },
+      "ExistEmail": {
+        "description": "Duplicated Entry",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": "E-mail already registered"
+          }
+        }
+      },
+      "IdNotFound": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": "ID not found"
+          }
+        }
+      },
+      "InvalidData": {
+        "description": "Unauthorised",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": "Invalid e-mail or password, please try again"
+          }
+        }
+      },
+      "RegisterCategory": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": "Unable to register category"
+          }
+        }
+      },
+      "RegisterProduct": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": "Unable to register product"
+          }
+        }
+      },
+      "RegisterUser": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": "Unable to register user"
+          }
+        }
+      },
+      "RegisterPurchase": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": "Unable to register purchase"
+          }
+        }
+      },
+      "RegisterDiscount": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": "Unable to register discount"
+          }
+        }
+      },
+      "SearchDb": {
+        "description": "Server side error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": "Unable to perform this action"
+          }
+        }
+      },
+      "Token": {
+        "description": "Server side error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": "Unable to generate a token"
+          }
+        }
+      },
+      "UpdateRegister": {
+        "description": "Server side error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": "Unable to update data"
           }
         }
       }

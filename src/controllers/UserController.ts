@@ -1,8 +1,10 @@
 import { Request, Response } from 'express';
 import { Purchase, User } from '../models';
 import bcrypt from 'bcryptjs';
+import MESSAGE from '../constants/messages';
+import getUserIdFromToken from '../helpers/getUserIdFromToken';
 
-export default class userController {
+export default class UserController {
   static create = async (req: Request, res: Response): Promise<Response> => {
     try {
       const { name, email, password, scope } = req.body;
@@ -10,7 +12,7 @@ export default class userController {
 
       const checkEmail = await User.count({ where: { email } });
       if (checkEmail) {
-        return res.status(409).json('Email já cadastrado');
+        return res.status(409).json({ "message": MESSAGE.ERROR.EXIST.EMAIL });
       }
 
       const newUser = await User.create({
@@ -21,7 +23,7 @@ export default class userController {
       });
       return res.status(201).json(newUser);
     } catch {
-      return res.status(400).json('Não foi possível realizar o cadastro');
+      return res.status(400).json({ "message": MESSAGE.ERROR.REGISTER.USER });
     }
   };
 
@@ -32,20 +34,7 @@ export default class userController {
       });
       return res.status(200).json(findUsers);
     } catch (error) {
-      return res.status(500).json('Não foi possível realizar a ação');
-    }
-  };
-
-  static findAllUserPurchase = async (req: Request, res: Response): Promise<Response> => {
-    const { id } = req.params;
-    try {
-      const findUsers = await User.findByPk(id, {
-        include: Purchase,
-        attributes: { exclude: ['password', 'scope', 'email'] },
-      });
-      return res.status(200).json(findUsers);
-    } catch (error) {
-      return res.status(500).json('Não foi possível realizar a ação');
+      return res.status(500).json({ "message": MESSAGE.ERROR.SEARCH_DB });
     }
   };
 
@@ -55,16 +44,37 @@ export default class userController {
       let findUser = await User.findByPk(id);
 
       if (!findUser) {
-        return res.status(404).json('Id não encontrado');
+        return res.status(404).json({ "message": MESSAGE.ERROR.ID_NOT_FOUND });
       }
 
       findUser = await User.findByPk(id, {
-        include: Purchase,
-        attributes: { exclude: ['password'] },
+        attributes: { exclude: ['password', 'deletedAt'] },
+        include: {
+          model: Purchase,
+          attributes: ['id_purchase', 'discount_id', 'total'],
+        },
       });
       return res.status(200).json(findUser);
     } catch {
-      return res.status(500).json('Não foi possível realizar a ação');
+      return res.status(500).json({ "message": MESSAGE.ERROR.SEARCH_DB });
+    }
+  };
+
+  static findMyUser = async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const userId = getUserIdFromToken(req);
+      let findUser = await User.findByPk(userId);
+
+      if (!findUser) {
+        return res.status(404).json({ "message": MESSAGE.ERROR.ID_NOT_FOUND });
+      }
+
+      findUser = await User.findByPk(userId, {
+        attributes: { exclude: ['password', 'deletedAt'] },
+      });
+      return res.status(200).json(findUser);
+    } catch {
+      return res.status(500).json({ "message": MESSAGE.ERROR.SEARCH_DB });
     }
   };
 
@@ -74,7 +84,7 @@ export default class userController {
       const { name, email, password, scope } = req.body;
       const checkUser = await User.findByPk(id);
       if (!checkUser) {
-        return res.status(404).json('Id não encontrado');
+        return res.status(404).json({ "message": MESSAGE.ERROR.ID_NOT_FOUND });
       }
 
       const criptoPassword = password ? bcrypt.hashSync(password, 10): checkUser.password;
@@ -93,10 +103,46 @@ export default class userController {
         }
       );
 
-      const showUser = await User.findByPk(id);
+      const showUser = await User.findByPk(id, {
+        attributes: { exclude: ['deletedAt', 'password'] },
+      });
       return res.status(200).json(showUser);
     } catch (error) {
-      return res.status(500).json('Não foi possível atualizar o cadastro');
+      return res.status(500).json({ "message": MESSAGE.ERROR.UPDATE_REGISTER });
+    }
+  };
+
+  static updateMyUser = async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const userId = getUserIdFromToken(req);
+      const { name, email, password, scope } = req.body;
+      const checkUser = await User.findByPk(userId);
+      if (!checkUser) {
+        return res.status(404).json({ "message": MESSAGE.ERROR.ID_NOT_FOUND });
+      }
+
+      const criptoPassword = password ? bcrypt.hashSync(password, 10): checkUser.password;
+
+      await User.update(
+        {
+          name,
+          email,
+          password: criptoPassword,
+          scope,
+        },
+        {
+          where: {
+            id_user: userId,
+          },
+        }
+      );
+
+      const showUser = await User.findByPk(userId, {
+        attributes: { exclude: ['deletedAt', 'password'] },
+      });
+      return res.status(200).json(showUser);
+    } catch (error) {
+      return res.status(500).json({ "message": MESSAGE.ERROR.UPDATE_REGISTER });
     }
   };
 
@@ -106,7 +152,7 @@ export default class userController {
 
       let deleteUser = await User.findByPk(id);
       if (!deleteUser) {
-        return res.status(404).json('Id não encontrado');
+        return res.status(404).json({ "message": MESSAGE.ERROR.ID_NOT_FOUND });
       }
       await User.destroy({
         where: {
@@ -115,7 +161,26 @@ export default class userController {
       });
       return res.status(204).json();
     } catch (error) {
-      return res.status(500).json('Não foi possível realizar a ação');
+      return res.status(500).json({ "message": MESSAGE.ERROR.DELETE });
+    }
+  };
+
+  static deleteMyUser = async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const userId = getUserIdFromToken(req);
+
+      let deleteUser = await User.findByPk(userId);
+      if (!deleteUser) {
+        return res.status(404).json({ "message": MESSAGE.ERROR.ID_NOT_FOUND });
+      }
+      await User.destroy({
+        where: {
+          id_user: userId,
+        },
+      });
+      return res.status(204).json();
+    } catch (error) {
+      return res.status(500).json({ "message": MESSAGE.ERROR.DELETE });
     }
   };
 }

@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
 import { Purchase, User } from '../models';
+import MESSAGE from '../constants/messages';
+import getUserIdFromToken from '../helpers/getUserIdFromToken';
 
-export default class purchaseController {
+export default class PurchaseController {
   static create = async (req: Request, res: Response): Promise<Response> => {
     try {
       const { total, user_id } = req.body;
@@ -11,19 +13,23 @@ export default class purchaseController {
       });
       return res.status(201).json(newOrder);
     } catch {
-      return res.status(400).json('Não foi possível realizar o cadastro');
+      return res.status(400).json({ "message": MESSAGE.ERROR.REGISTER.PURCHASE });
     }
   };
 
   static findAll = async (req: Request, res: Response): Promise<Response> => {
     try {
       const findPurchase = await Purchase.findAll({
-        include: {model: User, attributes: { exclude: ['password','email', 'scope', 'createdAt', 'updatedAt']}},
+        include: {
+          model: User, 
+          attributes: { 
+            exclude: ['password','email', 'scope','updatedAt','deletedAt']
+          }},
       });
 
       return res.status(200).json(findPurchase);
     } catch (error) {
-      return res.status(500).json('Não foi possível realizar a ação');
+      return res.status(500).json({ "message": MESSAGE.ERROR.SEARCH_DB });
     }
   };
 
@@ -33,15 +39,34 @@ export default class purchaseController {
       let findPurchase = await Purchase.findByPk(id);
 
       if (!findPurchase) {
-        return res.status(404).json('Id não encontrado');
+        return res.status(404).json({ "message": MESSAGE.ERROR.ID_NOT_FOUND });
       }
-
       findPurchase = await Purchase.findByPk(id, {
         include: User,
+        attributes: {
+          exclude: ['password','email', 'scope', 'createdAt', 'updatedAt']
+        }
       });
       return res.status(200).json(findPurchase);
     } catch {
-      return res.status(500).json('Não foi possível realizar a ação');
+      return res.status(500).json({ "message": MESSAGE.ERROR.SEARCH_DB });
+    }
+  };
+
+  static findAllUserPurchase = async (req: Request, res: Response): Promise<Response> => {
+    const id_user = getUserIdFromToken(req) as number;
+    try {
+      const findUserPurchases = await Purchase.findAll({
+        where: { user_id: id_user },
+        attributes: ['id_purchase', 'total', 'createdAt', 'discount_id'],
+        include: {
+          model: User, 
+          attributes: ['id_user', 'name'],
+        },
+      });
+      return res.status(200).json(findUserPurchases);
+    } catch (error) {
+      return res.status(500).json({ "message": MESSAGE.ERROR.SEARCH_DB });
     }
   };
 
@@ -53,7 +78,7 @@ export default class purchaseController {
 
       const checkPurchase = await Purchase.findByPk(id);
       if (!checkPurchase) {
-        return res.status(404).json('Id não encontrado');
+        return res.status(404).json({ "message": MESSAGE.ERROR.ID_NOT_FOUND });
       }
 
       await Purchase.update(
@@ -71,7 +96,7 @@ export default class purchaseController {
       const showPurchase = await Purchase.findByPk(id);
       return res.status(200).json(showPurchase);
     } catch (error) {
-      return res.status(500).json('Não foi possível atualizar o cadastro');
+      return res.status(500).json({ "message": MESSAGE.ERROR.UPDATE_REGISTER });
     }
   };
 
@@ -81,7 +106,7 @@ export default class purchaseController {
 
       let deletePurchase = await Purchase.findByPk(id);
       if (!deletePurchase) {
-        return res.status(404).json('Id não encontrado');
+        return res.status(404).json({ "message": MESSAGE.ERROR.ID_NOT_FOUND });
       }
       await Purchase.destroy({
         where: {
@@ -90,7 +115,7 @@ export default class purchaseController {
       });
       return res.status(204).json();
     } catch (error) {
-      return res.status(500).json('Não foi possível realizar a ação');
+      return res.status(500).json({ "message": MESSAGE.ERROR.DELETE });
     }
   };
 }
