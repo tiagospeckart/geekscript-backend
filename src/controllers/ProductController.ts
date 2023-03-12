@@ -32,8 +32,8 @@ export default class ProductController {
             model: Category,
             where: {
               name: categoryUrl,
-              attributes: ['name'],
             },
+            attributes: ['name'],
           },
         });
         return res.status(200).json(findProducts);
