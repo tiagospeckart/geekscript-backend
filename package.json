@@ -5,7 +5,7 @@
     "dev": "nodemon ./src/index.ts",
     "start": "node -r dotenv/config dist",
     "dbbuild": "npx sequelize db:create && npx sequelize db:migrate && npx sequelize db:seed:all",
-    "dbrebuild": "npx sequelize db:drop && npx sequelize db:create && npx sequelize db:migrate && npx sequelize db:seed:all"
+    "dbrebuild": "npx sequelize db:drop && npm run dbbuild"
   },
   "repository": {
     "type": "git",
