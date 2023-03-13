@@ -1,22 +1,24 @@
 import { Router } from 'express';
-import product from './product';
-import productController from '../controllers/ProductController';
-import purchase from './purchase';
-import login from './login';
-import category from './category';
-import user from './user';
-import swaggerUi from 'swagger-ui-express';
-import * as swaggerDocument  from "../api-docs/swagger.json";
+import userAuthentication from "../middlewares/authentication";
+import adminVerification from "../middlewares/adminVerification";
+import ProductController from '../controllers/ProductController';
+import productRoutes from './product';
+import purchaseRoutes from './purchase';
+import loginRoutes from './login';
+import categoryRoutes from './category';
+import userRoutes from './user';
+import checkoutRoutes from './checkout';
+import discountRoutes from './discount';
 
 const router = Router();
 
-router.use('/home', productController.findAll);
-router.use('/user', user);
-router.use('/product', product);
-router.use('/category',category);
-router.use('/purchase', purchase);
-router.use('/login', login);
-router.use('/api-docs', swaggerUi.serve);
-router.get('/api-docs', swaggerUi.setup(swaggerDocument));
+router.use('/home', ProductController.findAll);
+router.use('/user', userRoutes);
+router.use('/product', productRoutes);
+router.use('/category', categoryRoutes);
+router.use('/purchase', userAuthentication, purchaseRoutes);
+router.use('/login', loginRoutes);
+router.use('/checkout', userAuthentication, checkoutRoutes);
+router.use('/discount', userAuthentication, adminVerification, discountRoutes);
 
 export default router
