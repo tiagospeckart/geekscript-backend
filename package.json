@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "tsc",
+    "build": "tsc dbbuild",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon ./src/index.ts",
     "start": "node -r dotenv/config dist/index.js",
