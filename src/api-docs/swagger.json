@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "geek_script",
-    "description": "An API for a basic ecommerce themed around nerdy products. The final project of [Gama Academy](https://gama.academy/) webdevelopment course. Current version is still in development.\n\nUseful links:\n  - [Backend project repository](https://github.com/tiagospeckart/geekstore-backend)\n  - [Frontend project repository](https://github.com/GabrielGameDev/geek-script-front)",
+    "description": "An API for a simple e-commerce shop themed around nerdy products. The final project of [Gama Academy](https://gama.academy/) webdevelopment course. Current version is still in development.\n\nUseful links:\n  - [Backend project repository](https://github.com/tiagospeckart/geekscript-backend)\n  - [Frontend project repository](https://github.com/GabrielGameDev/geek-script-front)",
     "contact": {
       "name": "API Support",
       "email": "tiagospeckart@gmail.com"
@@ -11,7 +11,7 @@
       "name": "MIT",
       "url": "https://opensource.org/license/mit/"
     },
-    "version": "1.1.3"
+    "version": "1.2.1"
   },
   "servers": [
     {
@@ -59,7 +59,8 @@
         "tags": [
           "Login"
         ],
-        "summary": "Login route",
+        "summary": "Login into the system",
+        "description": "Here all Users can submit their e-mail and password, and by doing so, the encrypted password is compared to the one stored in the DB. The return is a JWT encrypted token containing relevant User data.",
         "operationId": "login",
         "requestBody": {
           "content": {
@@ -119,6 +120,7 @@
           "User"
         ],
         "summary": "Creates a new User",
+        "description": "By providing the required data fields, a new User account is made. Password is encrypted before being stored into the DB. The account has a Client scope by default, which can later be altered to Admin by another Administrator",
         "operationId": "registerUser",
         "requestBody": {
           "content": {
@@ -177,6 +179,7 @@
           "User"
         ],
         "summary": "Returns current logged User data",
+        "description": "A User profile page populated by acessing current logged User stored token.",
         "operationId": "getLoggedUser",
         "responses": {
           "200": {
@@ -223,7 +226,8 @@
           "Purchase",
           "User"
         ],
-        "summary": "Returns a list of purchases made by logged user",
+        "summary": "Returns a list of Purchases made by logged User",
+        "description": "A User purchases page populated by acessing current logged User stored token. Returns an array of past purchaces made.",
         "operationId": "getClientPurchases",
         "responses": {
           "200": {
@@ -272,6 +276,7 @@
           "User"
         ],
         "summary": "Updates current logged User data",
+        "description": "User can edit name, email, and password. For future implementation, it should restrict the capacity of Client Users to be able to update it's own id and scope.",
         "operationId": "updateLoggedUser",
         "requestBody": {
           "content": {
@@ -339,6 +344,7 @@
           "User"
         ],
         "summary": "Deletes current logged User data",
+        "description": "User can delete it's own account.",
         "operationId": "deleteLoggedUser",
         "responses": {
           "204": {
@@ -381,6 +387,7 @@
           "User"
         ],
         "summary": "Returns a list of all Users",
+        "description": "Administrators can access all existing Users in the system.",
         "operationId": "getAllUser",
         "responses": {
           "200": {
@@ -419,6 +426,7 @@
           "Admin"
         ],
         "summary": "Returns a User by ID",
+        "description": "Returns all the data of a specific User.",
         "operationId": "getOneUser",
         "parameters": [
           {
@@ -478,6 +486,7 @@
           "User"
         ],
         "summary": "Updates a User by ID",
+        "description": "Administrators can adit all data fields of a User.",
         "operationId": "updateOneUser",
         "parameters": [
           {
@@ -557,7 +566,8 @@
         "tags": [
           "User"
         ],
-        "summary": "Updates a User by ID",
+        "summary": "Deletes a User by ID",
+        "description": "Administrators can delete a specific User.",
         "operationId": "deleteOneUser",
         "parameters": [
           {
@@ -614,12 +624,13 @@
           "Product"
         ],
         "summary": "Returns a list of all Products with option to select by Category",
+        "description": "Returns all products avaiable in the system. If a Category name is passed as an optional Query in the url, it returns only the list of the Products of this Category.",
         "operationId": "getProducts",
         "parameters": [
           {
             "name": "category",
             "in": "query",
-            "description": "Valid category name as query parameter to select a few products",
+            "description": "Valid Category name as query parameter to select Products of this Category",
             "required": false,
             "style": "form",
             "explode": true,
@@ -659,6 +670,7 @@
           "Product"
         ],
         "summary": "Returns a Product by ID",
+        "description": "Returns a single Product object containing all of it's information",
         "operationId": "getOneProduct",
         "parameters": [
           {
@@ -723,6 +735,7 @@
           "Admin"
         ],
         "summary": "Creates a new Product",
+        "description": "Creates a new Product. Requires a valid Category Id number.",
         "operationId": "createProduct",
         "requestBody": {
           "content": {
@@ -778,6 +791,7 @@
           "Admin"
         ],
         "summary": "Updates a Product",
+        "description": "Updates the data fields of a specific existing Product.",
         "operationId": "updateProduct",
         "parameters": [
           {
@@ -852,6 +866,7 @@
           "Admin"
         ],
         "summary": "Deletes a Product",
+        "description": "Deletes a single Product.",
         "operationId": "deleteProduct",
         "parameters": [
           {
@@ -907,7 +922,8 @@
         "tags": [
           "Purchase"
         ],
-        "summary": "Checkout page",
+        "summary": "Insert into system a new purchase",
+        "description": "This is where purchases are confirmed. While browsing the website, User can add Products to their shopping cart. At the /checkout page, all products selected at the current session are displayed, toghether with the order total value (a sum of each item's value). When the Purchase is cofirmed, the Frontend sends a list of products Ids (as puchaseIdList) and a total purchase value. Optionally, a discount coupon name can be submitted, subtracting the order total value.",
         "operationId": "checkout",
         "requestBody": {
           "content": {
@@ -964,6 +980,7 @@
           "Admin"
         ],
         "summary": "Returns an array of Purchases",
+        "description": "Administrators can see a list of all Purchases made in the system.",
         "operationId": "getAllPurchases",
         "responses": {
           "200": {
@@ -1026,6 +1043,7 @@
           "Admin"
         ],
         "summary": "Updates a Purchase",
+        "description": "Administrators can alter de data of a single Purchase.",
         "operationId": "updatePurchase",
         "parameters": [
           {
@@ -1111,6 +1129,7 @@
           "Admin"
         ],
         "summary": "Deletes a Purchase",
+        "description": "Administrators can delete a single Purchase.",
         "operationId": "deletePurchase",
         "parameters": [
           {
@@ -1167,6 +1186,7 @@
           "Category"
         ],
         "summary": "Returns a list of all Categories",
+        "description": "Displays all Categories avaiable at the store.",
         "operationId": "getAllCategory",
         "responses": {
           "200": {
@@ -1267,6 +1287,7 @@
           "Admin"
         ],
         "summary": "Creates a new Category",
+        "description": "Creates a new Category into the system.",
         "operationId": "createCategory",
         "requestBody": {
           "content": {
@@ -1335,6 +1356,7 @@
           "Admin"
         ],
         "summary": "Updates a Category by ID",
+        "description": "Updates a currently existing Category.",
         "operationId": "updateCategory",
         "parameters": [
           {
@@ -1411,6 +1433,7 @@
           "Admin"
         ],
         "summary": "Deletes a Category by ID",
+        "description": "Deletes an existing Category.",
         "operationId": "removeCategory",
         "parameters": [
           {
@@ -1469,6 +1492,7 @@
           "Admin"
         ],
         "summary": "Returns a list of all Discounts",
+        "description": "Administrators can access a list of all existing Discount coupons.",
         "operationId": "getAllDiscounts",
         "responses": {
           "200": {
@@ -1505,6 +1529,7 @@
           "Admin"
         ],
         "summary": "Creates a new Discount",
+        "description": "Administrators can create a new Discount coupon.",
         "operationId": "createDiscount",
         "requestBody": {
           "content": {
@@ -1557,6 +1582,7 @@
           "Admin"
         ],
         "summary": "Returns a Discount by ID",
+        "description": "Administrators can acess the data of a specific Discount coupon.",
         "operationId": "getOneDiscount",
         "parameters": [
           {
@@ -1608,6 +1634,7 @@
           "Admin"
         ],
         "summary": "Updates a Discount by ID",
+        "description": "Administrators can create a new Discount coupon.",
         "operationId": "updateDiscount",
         "parameters": [
           {
@@ -1681,6 +1708,7 @@
           "Admin"
         ],
         "summary": "Deletes a Discount by ID",
+        "description": "Administrators can delete a specific Discount coupon.",
         "operationId": "removeDiscount",
         "parameters": [
           {
@@ -1760,7 +1788,8 @@
             "format": "password"
           },
           "scope": {
-            "type": "string"
+            "type": "string",
+            "example": "client"
           }
         }
       },
