@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "geek_script",
-    "description": "An API for a simple e-commerce shop themed around nerdy products. The final project of [Gama Academy](https://gama.academy/) webdevelopment course. Current version is still in development.\n\nUseful links:\n  - [Backend project repository](https://github.com/tiagospeckart/geekscript-backend)\n  - [Frontend project repository](https://github.com/GabrielGameDev/geek-script-front)",
+    "description": "An API for a simple e-commerce shop themed around nerdy products. The final project of [Gama Academy](https://gama.academy/) webdevelopment course. \n\nUseful links:\n  - [Backend project repository](https://github.com/tiagospeckart/geekscript-backend)\n  - [Frontend project repository](https://github.com/GabrielGameDev/geek-script-front)",
     "contact": {
       "name": "API Support",
       "email": "tiagospeckart@gmail.com"
