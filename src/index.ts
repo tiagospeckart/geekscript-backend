@@ -1,7 +1,6 @@
-import config from './configs/config';
-import app from './infra/api/API'
+import App from './infra/api/API'
 
-app.listen(config.app.port, () => {
-  console.info(`Server listening on Port: ${config.app.port}`);
-});
+const app = new App();
+
+app.setup({});
 
