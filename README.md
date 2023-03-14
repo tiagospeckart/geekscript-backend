@@ -17,7 +17,7 @@ Final project of [Gama Academy](https://www.gama.academy/) Webdevelopment course
 
 ## Frontend Repo
 
-[geek-script-front](https://github.com/GabrielGameDev/geek-script-front)
+### [geek-script-front](https://github.com/GabrielGameDev/geek-script-front)
 
 ## Installation
 
@@ -36,18 +36,28 @@ Starter admin account: email **admin@admin.com**, pass **admin123**
 1. Delete `dist` folder
 2. `npm run build`
 3. `npm run dbrebuild`
+
 ## API Documentation
 
-[SwaggerHub](https://app.swaggerhub.com/apis-docs/tiagospeckart/geek_script/1.0.8)
+### From deployed server
+
+**Temporarily online only for demonstration purposes**
+
+https://geekscript-backend-production.up.railway.app/api-docs/
+
+### From SwaggerHub
+
+https://app.swaggerhub.com/apis-docs/tiagospeckart/geek_script/1.2.1
+
 ### Running locally
 
 1. Run server with `npm run dev`
-2. Acess URL `localhost:{ENV.APP_PORT}/api-docs` 
+2. Acess URL `{host}:{port}/api-docs` 
 
 For ease of use, I *strongly* recommend the **Swagger Viewer** VS Code Extension. 
 
 To start it:
-Open the `swagger.json` file (at /api-docs) and either:
+Open the `swagger.json` file (at `src/api-docs`) and either:
 - Press F1 -> Run `Preview Swagger` 
 - Press Shift + Alt + P
 - Right click file in explorer panel and click `Preview Swagger`
