@@ -24,9 +24,9 @@ export default class App {
     mySqlConection.hasConection();
     const selectedPort = options.port ? options.port : this.defaultPort;
     this.instance.use(Express.json());
+    this.instance.use(cors());
     this.instance.use("/", router);
     this.instance.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-    this.instance.use(cors());
     this.instance.use(handleError);
 
     if (options.isTest) return;
