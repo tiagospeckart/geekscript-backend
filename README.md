@@ -1,6 +1,6 @@
 # geekstore-backend
 
-Final project of [Gama Academy](https://www.gama.academy/) Webdevelopment course. It's a MVP of a backend server that manages a REST API for an ecommerce.
+This repository is the final project for the Gama Academy Web Development course, featuring a minimum viable product (MVP) of a backend server that manages a REST API for an e-commerce platform.
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/tiagospeckart/geekstore-backend?style=for-the-badge)
 ![GitHub language count](https://img.shields.io/github/languages/count/tiagospeckart/geekstore-backend?style=for-the-badge)
@@ -8,14 +8,14 @@ Final project of [Gama Academy](https://www.gama.academy/) Webdevelopment course
 ![Bitbucket open issues](https://img.shields.io/bitbucket/issues/tiagospeckart/geekstore-backend?style=for-the-badge)
 ![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/tiagospeckart/geekstore-backend?style=for-the-badge)
 
-## Stacks
+## Tech Stack
 
 - **Node.js**
 - **Express**
 - **Sequelize ORM**
 - **Typescript**
 
-## Frontend Repo
+## Frontend Repository
 
 ### [geek-script-front](https://github.com/GabrielGameDev/geek-script-front)
 
@@ -26,16 +26,16 @@ Final project of [Gama Academy](https://www.gama.academy/) Webdevelopment course
 3. Build `npm run build`
 4. Test server `npm run dev`
 
-### Create Database
-
-- Run `npm run dbbuild`
-
-Starter admin account: email **admin@admin.com**, pass **admin123**
-#### Recreating the database
+### Recreating the database
 
 1. Delete `dist` folder
 2. `npm run build`
 3. `npm run dbrebuild`
+
+### Starter admin account
+
+- email **admin@admin.com**
+- pass **admin123**
 
 ## API Documentation
 
