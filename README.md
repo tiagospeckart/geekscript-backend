@@ -10,10 +10,10 @@ This repository is the final project for the Gama Academy Web Development course
 
 ## Tech Stack
 
-- **Node.js**
-- **Express**
-- **Sequelize ORM**
-- **Typescript**
+- Node.js
+- Express
+- Sequelize ORM
+- Typescript
 
 ## Frontend Repository
 
@@ -39,28 +39,28 @@ This repository is the final project for the Gama Academy Web Development course
 
 ## API Documentation
 
-### From deployed server
+### Deployed Server
 
-**Temporarily online only for demonstration purposes**
+The API documentation is temporarily available online for demonstration purposes:
 
-https://geekscript-backend-production.up.railway.app/api-docs/
+[GeekScript Backend Production API Docs](https://geekscript-backend-production.up.railway.app/api-docs/)
 
 ### From SwaggerHub
 
-https://app.swaggerhub.com/apis-docs/tiagospeckart/geek_script/1.2.1
+[SwaggerHub GeekScript API Docs](https://app.swaggerhub.com/apis-docs/tiagospeckart/geek_script/1.2.1)
 
 ### Running locally
 
 1. Run server with `npm run dev`
 2. Acess URL `{host}:{port}/api-docs` 
 
-For ease of use, I *strongly* recommend the **Swagger Viewer** VS Code Extension. 
+For ease of use, we recommend the [Swagger Viewer VS Code Extension](https://marketplace.visualstudio.com/items?itemName=Arjun.swagger-viewer). To start the extension:
 
-To start it:
-Open the `swagger.json` file (at `src/api-docs`) and either:
-- Press F1 -> Run `Preview Swagger` 
-- Press Shift + Alt + P
-- Right click file in explorer panel and click `Preview Swagger`
+1. Open the `swagger.json` file located at `src/api-docs`.
+2. Choose one of the following options:
+- Press `F1` -> Run Preview Swagger
+- Press `Shift + Alt + P`
+- Right click file in explorer panel and click "Preview Swagger"
 
 ## Project Team
 
