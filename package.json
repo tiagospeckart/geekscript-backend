@@ -1,13 +1,14 @@
 {
   "scripts": {
-    "build": "tsc && npm run dbbuild",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon ./src/index.ts",
-    "start": "node dist/index.js",
-    "dbbuild": "npx sequelize db:create && npx sequelize db:migrate && npx sequelize db:seed:all",
-    "dbrebuild": "npx sequelize db:drop && npm run dbbuild",
-    "postinstall": "npm run build"
-  },
+  "build": "tsc && npm run dbbuild",
+  "test": "echo \"Error: no test specified\" && exit 1",
+  "dev": "nodemon ./src/index.ts",
+  "start": "node dist/index.js",
+  "dbbuild": "npx sequelize db:create && npx sequelize db:migrate",
+  "dbrebuild": "npx sequelize db:drop && npm run dbbuild",
+  "seed": "npx sequelize db:seed:all",
+  "postinstall": "npm run build && npm run seed"
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tiagospeckart/geekstore-backend.git"
