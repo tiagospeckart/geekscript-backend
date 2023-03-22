@@ -12,8 +12,17 @@ This repository is the final project for the Gama Academy Web Development course
 
 - Node.js
 - Express
-- Sequelize ORM
 - Typescript
+- Sequelize ORM
+- Relational Database:
+  - mysql
+  - postgres
+  - sqlite
+  - mariadb
+  - mssql
+  - db2
+  - snowflake
+  - oracle
 
 ## Frontend Repository
 
