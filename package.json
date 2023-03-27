@@ -14,8 +14,9 @@
     "url": "git+https://github.com/tiagospeckart/geekstore-backend.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Tiago Martins Speckart <tiagospeckart@gmail.com>",
+  "constributors": ["Thiago Corrêa de Almeida <tcalmeida85@gmail.com>"],
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/tiagospeckart/geekstore-backend/issues"
   },
