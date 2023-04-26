@@ -1,4 +1,3 @@
-// controllers/CategoryController.ts
 import { Request, Response } from 'express';
 import { ICategoryService } from '../services/CategoryService';
 import MESSAGE from '../constants/messages';
