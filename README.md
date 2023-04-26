@@ -8,6 +8,13 @@ This repository is the final project for the Gama Academy Web Development course
 ![Bitbucket open issues](https://img.shields.io/bitbucket/issues/tiagospeckart/geekstore-backend?style=for-the-badge)
 ![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/tiagospeckart/geekstore-backend?style=for-the-badge)
 
+## Current goals
+
+Even with the job done, I still feel there's room for a lot of improvement. Now the main goals are:
+- Refactoring to easen the testing process, mainly separating the business logic from the HTTP controllers
+- Study how to implement a testing anvironment for current project version
+- Use testing implementation to further refine this codebase
+
 ## Tech Stack
 
 - Node.js
