@@ -1,97 +1,58 @@
+// controllers/CategoryController.ts
 import { Request, Response } from 'express';
-import { Category } from '../models';
+import { ICategoryService } from '../services/CategoryService';
 import MESSAGE from '../constants/messages';
 
-export default class CategoryController {
-  static create = async (req: Request, res: Response): Promise<Response> => {
+export class CategoryController {
+  constructor(private categoryService: ICategoryService) {}
+
+  create = async (req: Request, res: Response): Promise<Response> => {
     try {
       const { name } = req.body;
-      const categoryCount: number = await Category.count({ where: { name } });
-      if (categoryCount) {
-        return res.status(409).json({ "message": MESSAGE.ERROR.EXIST.CATEGORY });
-      }
-      const newCategory: Category = await Category.create({
-        name,
-      });
+      const newCategory = await this.categoryService.create(name);
       return res.status(201).json(newCategory);
-    } catch {
+    } catch (error) {
       return res.status(400).json({ "message": MESSAGE.ERROR.REGISTER.CATEGORY });
     }
   };
 
-  static findAll = async (req: Request, res: Response): Promise<Response> => {
+  findAll = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const findCategories: Category[] = await Category.findAll();
-      return res.status(200).json(findCategories);
+      const categories = await this.categoryService.findAll();
+      return res.status(200).json(categories);
     } catch (error) {
       return res.status(500).json({ "message": MESSAGE.ERROR.SEARCH_DB });
     }
   };
 
-  static findOne = async (req: Request, res: Response): Promise<Response> => {
+  findOne = async (req: Request, res: Response): Promise<Response> => {
     try {
       const { id } = req.params;
-      let findCategory = await Category.findByPk(id);
-
-      if (!findCategory) {
-        return res.status(404).json({ "message": MESSAGE.ERROR.ID_NOT_FOUND });
-      }
-
-      findCategory = await Category.findByPk(id, {
-        attributes: {
-          exclude: ['password'],
-        },
-      });
-      return res.status(200).json(findCategory);
-    } catch {
-      return res.status(500).json({ "message": MESSAGE.ERROR.SEARCH_DB });
-    }
-  };
-
-  static update = async (req: Request, res: Response): Promise<Response> => {
-    try {
-      const { id } = req.params;
-      const { name } = req.body;
-
-      const checkCategory = await Category.findByPk(id);
-      if (!checkCategory) {
-        return res.status(404).json({ "message": MESSAGE.ERROR.ID_NOT_FOUND });
-      }
-
-      await Category.update(
-        {
-          name,
-        },
-        {
-          where: {
-            id_category: id,
-          },
-        }
-      );
-
-      const showCategory = await Category.findByPk(id);
-      return res.status(200).json(showCategory);
+      const category = await this.categoryService.findOne(id);
+      return res.status(200).json(category);
     } catch (error) {
-      return res.status(500).json({ "message": MESSAGE.ERROR.UPDATE_REGISTER });
+      return res.status(404).json({"message": MESSAGE.ERROR.ID_NOT_FOUND });
     }
   };
-
-  static delete = async (req: Request, res: Response): Promise<Response> => {
+    
+  update = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const { id } = req.params;
-
-      let deleteCategory = await Category.findByPk(id);
-      if (!deleteCategory) {
-        return res.status(404).json({ "message": MESSAGE.ERROR.ID_NOT_FOUND });
-      }
-      await Category.destroy({
-        where: {
-          id_category: id,
-        },
-      });
-      return res.status(204).json();
+    const { id } = req.params;
+    const { name } = req.body;
+    const updatedCategory = await this.categoryService.update(id, name);
+    return res.status(200).json(updatedCategory);
     } catch (error) {
-      return res.status(500).json({ "message": MESSAGE.ERROR.DELETE });
+    return res.status(500).json({ "message": MESSAGE.ERROR.UPDATE_REGISTER });
     }
-  };
-}
+    };
+    
+    delete = async (req: Request, res: Response): Promise<Response> => {
+    try {
+    const { id } = req.params;
+    await this.categoryService.delete(id);
+    return res.status(204).json();
+    } catch (error) {
+    return res.status(500).json({ "message": MESSAGE.ERROR.DELETE });
+    }
+    };
+    }
