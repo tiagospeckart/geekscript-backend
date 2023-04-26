@@ -8,7 +8,7 @@ interface User extends Model<InferAttributes<User>, InferCreationAttributes<User
   name: string;
   email: string;
   password: string;
-  scope?: string;
+  scope: string;
   createdAt: CreationOptional<Date>;
   updatedAt: CreationOptional<Date>;
   deletedAt: CreationOptional<Date>;
